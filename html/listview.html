@@ -1,0 +1,73 @@
+<html  lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Boat Drone</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.13.0/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="../css/listview.css">
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.13.0/build/ol.js"></script>
+    
+    <script src="../js/listview.js"></script>
+    <script src="../js/webbsockets.js"></script>
+    <script src="../js/data.js"></script>
+  </head>
+  <body>
+    <h1>Boat Drone</h1>
+
+<p id="dump"></p>
+
+    <div>
+        <p class="system-header" onclick="ToggleShowOrNot('video-stream');">video stream</p>
+        <div id="video-stream" class="dropdown-content">
+            <p>camera 1:</p>
+            <img id="camera" src="../images/skogsmus.jpg" width="" height="" ></img>
+        </div>
+    </div>
+
+    <div>
+      <p class="system-header" onclick="ToggleShowOrNot('gps');  LoadMap();">gps</p>
+      <div id="gps" class="dropdown-content">
+          <div id="map" class="map"></div>
+          <p id="cordinates">cordinates: -.-</p>
+          <p id="angle" class ="">angle: -</p>
+          <p id="speed" >speed: -</p>
+          
+          <div class="nofloat"></div>
+          <button >autopilot</button>
+
+      </div>
+    </div>
+
+    <div>
+      <p class="system-header" onclick="ToggleShowOrNot('battery');">data</p>
+      <div id="battery" class="dropdown-content">
+          <p id="voltage">voltage: - </p>
+          <p id="amparage">amparage - </p>
+          <p id="time-until-death">time estimate until death: - </p>
+          <p id="motor-temprature">motor temprature: -</p>
+          <p id="motor-rpm">motor rpm: - </p>
+          <p id="temprature">temprature: -</p>
+      </div>
+    </div>
+
+    <div>
+      <p class="system-header" onclick="ToggleShowOrNot('connection');">conection</p>
+      <div id="connection" class="dropdown-content">
+          <p id="type">type: - </p>
+          <p id="strength">strength: - </p>
+      </div>
+    </div>
+
+    <p class="system-header" onclick="ToggleShowOrNot('controlls');">controlls</p>
+    <div id="controlls" class="dropdown-content">
+      <p>joysticks</p>
+    </div>
+  </div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  <footer>
+    <p class="footer-element"><a href="index.html">home</a><p>
+    <p class="footer-element"><a href ="liveactionview.html">Live Action View</a><p>
+  </footer>
+
+
+  </body>
+</html>
