@@ -3,15 +3,44 @@
   <head>
     <title>Boatdrone</title>
     <link rel="stylesheet" href="../css/liveActionView.css">
-    <script src="../js/liveActionView.js"></script>
+    <script src="../js/liveActionViewoop.js"></script>
   </head>
   <body>
+    <div id="camera-box">
     <img id ="camera" src="../images/skogsmus.jpg">
-    
-    <div id="slider-container">
-        <input id="throttle" class ="slider" type="range" min="0" value="40" max="255" orient="vertical">
-        <input id="gimble" class ="slider" type="range" min="0" value="30" max ="255" >
     </div>
+
+    <div id ="absolute">
+      <div id="data">
+        <input type="image" id="settings" src="../images/settings-icon.svg"  width="30px" height="30px">
+      </div>
+    
+      <div id="slider-container">
+          <input id="throttle" class ="slider" type="range" min="0" value="40" max="255" orient="vertical">
+          <input id="gimble" class ="slider" type="range" min="0" value="30" max ="255" >
+      </div>
+    </div>
+    <div id="settings-container">
+      <p>Settings</p>
+      <input type="checkbox"id="slider-checkbox"><label> use Sliders (recomended for tablets and smartphones)</label><br>
+      <input type="checkbox" id ="keyboard-checkbox"><label> use Keyboard</label><br>
+      <input type="checkbox" id="gamepad-checkbox"><label> use a gamepad controller</label><br>
+
+      <div id="gamepad-settings-container">
+        <p>gamepad settings:</p>
+        <button type="button" value="0">gamepad axe 0</button><label> press this and move a gamepad-axe foreward to remap gamepad-throttle<br></label>
+        <button type="button" value="2">gamepad axe 2</button><label> press this and move a gamepad-axe foreward to remap gamepad-gimble<br></label>
+      </div>
+      <div id="keyboard-settings-container">  
+        <p>keyboard settings:</p>
+        <button type="button" value="KeyW">w</button><label> press this and then a button to bind to throttle forward<br></label>
+        <button type="button" value="KeyS">s</button><label> press this and then a button to bind to throttle backward<br></label>
+        <button type="button" value="KeyD">d</button><label> press this and then a button to bind to gimble left<br></label>
+        <button type="button" value="KeyA">a</button><label> press this and then a button to bind to gimble right<br></label>
+      </div>
+
+    </div>
+
   </body>
 </html> 
 
