@@ -5,14 +5,16 @@ The code is still not ready for use.
 only tested on rasspberry pi 2! 
 sudo apt update
 sudo apt install upgrade
-sudo apt install gpsd //i use a usb-gps device. I use a gpsd-python-libary that talks to gpsd witch in return talk to the device.
-sudo apt install python3 && python3-dev 
+sudo apt install gpsd          //i use a usb-gps device. I use a gpsd-python-libary that talks to gpsd witch in return talk to the device.
+sudo apt install python3 && python3-dev
+
 //stuff for opencv to work.   this last worked 2022-04-20 raspberry pi bullseye 
 sudo apt install sudo apt-get install -y \
 	libjpeg-dev libpng-dev libtiff-dev libgtk-3-dev \
 	libavcodec-extra libavformat-dev libswscale-dev libv4l-dev \
 	libxvidcore-dev libx264-dev libjasper1 libjasper-dev \
 	libatlas-base-dev gfortran libeigen3-dev libtbb-dev
+
 pip install numpy
 pip install opencv
 
