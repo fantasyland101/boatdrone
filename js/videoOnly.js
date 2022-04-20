@@ -1,10 +1,12 @@
 var camera;  //the image object in html
-var url;
+var url=null;
 
 function createUrlFromBlob(blob){ //create url to blob
+    console.log(blob)
     var urlCreator = window.URL || window.webkitURL;
-    urlCreator.revokeObjectURL(url);
-    url = urlCreator.createObjectURL(blob);
+    if(url!=null)
+        urlCreator.revokeObjectURL(url);
+    url = urlCreator.createObjectURL(blob.slice(8),{type:'jpeg'});//,{type:"PNG"});
 }
 
 function updateCamera(){
@@ -24,7 +26,7 @@ function updateCamera(){
 }
 
 
-const socket = new WebSocket('ws://localhost:8002');
+const socket = new WebSocket('ws://192.168.1.124:8002');
 
 window.addEventListener('load', function() {
 
@@ -40,7 +42,4 @@ window.addEventListener('load', function() {
     window.addEventListener('resize', function(){
         updateCamera();
     });   
-
-
-
 });

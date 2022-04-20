@@ -150,7 +150,7 @@ class Camera{
         var urlCreator = window.URL || window.webkitURL;
         var oldUrl=this.img.src;
         urlCreator.revokeObjectURL(oldUrl);
-        this.img.src= urlCreator.createObjectURL(blob);
+        this.img.src= urlCreator.createObjectURL(blob.slice(8));
     }  
 }
 
@@ -385,7 +385,9 @@ class KeyboardInput{
 
 
 
-let socket = new Sockets( new WebSocket('ws://localhost:8002'));
+
+
+let socket = new Sockets( new WebSocket('ws://192.168.1.124:8002'));
 let settings;
 let camera;
 let slider;
