@@ -1,56 +1,39 @@
 #!/usr/bin/env python
-
 import asyncio
-import json
 import websockets
 import cv2
 from time import sleep
-from threading import Thread
-import struct
-
-
 import gpsd
-
-
+from gpiozero import CPUTemperature
 
 #maybee multiple conections if not multiple VIDEOCAPTURES
-async def handler(websocket): #called when conection is established
-    print("connected")
+async def handler(websocket): #called when conection is established 
     global rval
     image = bytes()
     gps_pos =(0,0)
-    #g= asyncio.create_task(gps())
-    #asyncio.run(camera())
-    #i = asyncio.create_task(camera())
-
-
+    cpu_temp=0
+    
     while True:
-
-
-
         if rval:
             rval, frame = vc.read()
-            image = cv2.imencode(".jpg", frame)[1].tobytes()
+            image = cv2.imencode(".png", frame)[1].tobytes()  #.jpg is faster!
         try:
             packet = gpsd.get_current()
-            gps_pos = packet.position()
-            #print(gps_pos)
+            gps_pos = packet.position()  
+            cpu_temp = CPUTemperature().temperature
         finally:
             pass
-            #print("gps_have not started yet")
-
+            #print("gps_have not started yet)
             a = bytearray(struct.pack("f", gps_pos[0])) #4 bytes
             b=  bytearray(struct.pack("f", gps_pos[1])) #same
+            c = bytearray(struct.pack("f", cpu_temp)) #same
 
-        data = a+b+image # longitude bytes 4|latitude bytes 4|img_bytes-jpeg?
+        data = a+b+c+image # longitude bytes 4|latitude bytes 4|img_bytes-jpeg?
         if data != None:
-            await websocket.send(data)
-
-
-
-
-
-
+            await websocket.send(data) #more then one client is slow!        
+         
+            #websockets.broadcast(CONNECTIONS,data)       
+        #await asyncio.sleep(0.1) 
 
 async def main():
     async with websockets.serve(handler,"", 8002): #creates webserver with handle "handler"
@@ -63,5 +46,4 @@ if __name__ == "__main__":
         rval, frame = vc.read()
     else:
         rval = False
-
     asyncio.run(main())  #entry point of main
