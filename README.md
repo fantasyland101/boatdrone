@@ -1,6 +1,6 @@
 # boatdrone
 A frontend and backend for controling a rc-boat and getting live video feed and data using websockets and server side event's.
-The code is still not ready for use.
+####The code is still not ready for use.
 
 # depencys
 python3, python3-dev, gpsd (talks to my usb gps), opencv (AI libary, used for usb-webbcam video), numpy (needed for opencv)
@@ -26,7 +26,7 @@ you may need to allow serial in raspi-config (sudo raspi-config) to get the usb-
 sudo apt install gpsd-clients to test out gpsd without python
 
 # Installation
-run all pythonscripts in /backend on rasspberry pi. These are 2 websocketservers and have no security whatsoever.  
+run all pythonscripts in /backend on rasspberry pi. ###These are 2 websocketservers and have no security whatsoever.  
 Therefore I have my pi connected to a trusted network and then I port forward the websocketserver-ports to my laptop on another network through an ssh tunnel. This ensures that the websocket is secure.
 
 
