@@ -6,6 +6,7 @@ The code is still not ready for use.
 python3, python3-dev, gpsd (talks to my usb gps), opencv (AI libary, used for usb-webbcam video), numpy (needed for opencv)
 
 how i got these dependencys installed on my rasspberry-pi-2:
+```
 	sudo apt update
 	sudo apt upgrade
 	sudo apt install gpsd      
@@ -20,15 +21,16 @@ how i got these dependencys installed on my rasspberry-pi-2:
 
 	pip install numpy
 	pip install opencv
-
+```
 you may need to allow serial in raspi-config (sudo raspi-config) to get the usb-gps to work. gpsd aplications takes some (3-6 seconds) time to lanch!
 sudo apt install gpsd-clients to test out gpsd without python
 
 # Installation
-run all pythonscripts in /backend on rasspberry pi. These are 2 websocketservers and have no security whatsoever. 
-I have my pi connected to a trusted network and then I port forward through an ssh tunnel to that network so that my conection is secure.
-on the other end i open /html/liveActionView.html in a browser.
+run all pythonscripts in /backend on rasspberry pi. These are 2 websocketservers and have no security whatsoever.  
+Therefore I have my pi connected to a trusted network and then I port forward the websocketserver-ports to my laptop on another network through an ssh tunnel. This ensures that the websocket is secure.
 
+
+on my laptop i open /html/liveActionView.html in a browser and can from there controll my rc boat. 
 
 I take no liability in you using this repo in any way shape or form. 
 
