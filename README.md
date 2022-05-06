@@ -25,13 +25,46 @@ how i got these dependencys installed on my rasspberry-pi-2:
 you may need to allow serial in raspi-config (sudo raspi-config) to get the usb-gps to work. gpsd aplications takes some (3-6 seconds) time to lanch!
 sudo apt install gpsd-clients to test out gpsd without python
 
-# Installation
-run all pythonscripts in /backend on rasspberry pi. These are 2 websocketservers and **have no security whatsoever**.  
-Therefore I have my pi connected to a trusted network and then I port forward the websocketserver-ports to my laptop (on another network) through an ssh tunnel. This ensures that the websocket is secure.
+then install this github-reposotary. I recomend using wget. the backend folder is suposed to be install on the rassberry pi and the rest on the client computer.
 
-exampel of port forwarding port 2947 through a ssh tunel to port 2947:
+# Installation
+run the 2 webbsocketservers in boatdrone/backend on rasspberry pi (python3 [filepath]). These websocketservers **have no security whatsoever** therefore only comunicate with these servers on trusted networks.
+
+My network setup:
+
+-------------------------------------------------INTERNET----------------------------------------------------------------------------------------------------
+-                                                                                                                                                           -
+-         ---old-phone-4g-hotspot. (no network port forward)--------------                        --------lan. PORT 20 forwarded to server-1. ----          -
+-         -                                                              -                        -                                              -          -
+-         -    rassberry pi 2:                                           -                        -         server 1:                            -          -
+-         -       port 8001 webbsocketserver 1                           -                        -            ssh-server on port 20             -          -       
+-         -       port 8002 webbsocketserver 2                           -                        -                                              -          -
+-         -       reverse ssh-tunel port forwards 8001 & 8002 to server 1-                        -                                              -          -       
+-         -                                                              -                        -                                              -          -
+-         ----------------------------------------------------------------                        ------------------------------------------------          -
+-                                                                                                                                                           -
+-                                                                                                                                                           - 
+-                                                                                                                                                           -
+-                                                                                                                                                           - 
+-                                                                                                                                                           -
+-        -------home-network.  (no network port forward)---------------------                                                                               -
+-        -                                                                  -                                                                               - 
+-        -	laptop:                                                     -                                                                               -
+-        -          port forwards 8001 & 8002 through ssh-tunel to server-1 -                                                                               - 
+-        -                                                                  -                                                                               - 
+-        --------------------------------------------------------------------                                                                               -
+-                                                                                                                                                           -
+-                                                                                                                                                           -
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+exampel of port forwarding port 8002 through a ssh tunel to port 8002:
 ```
-ssh -N -L 2947:localhost:2947 pi@192.168.1.124
+ssh -N -L 8002:localhost:8002 username@ip_for_lan
+```
+example of reverse port forwarding port 8002 through ssh tunnel:
+```
+ssh -N -R 8002:localhost:8002 username@ip_for_lan
 ```
 
 on my laptop i open /html/liveActionView.html in a browser and can from there controll my rc boat. 
