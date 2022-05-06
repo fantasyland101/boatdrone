@@ -36,7 +36,7 @@ My network setup:
 -                                                                                                                                                           -
 -         ---old-phone-4g-hotspot. (no network port forward)--------------                        --------lan. PORT 20 forwarded to server-1. ----          -
 -         -                                                              -                        -                                              -          -
--         -    rassberry pi 2:                                           -                        -         server 1:                            -          -
+-         -    rassberry pi 2:                                           -                        -         server-1:                            -          -
 -         -       port 8001 webbsocketserver 1                           -                        -            ssh-server on port 20             -          -       
 -         -       port 8002 webbsocketserver 2                           -                        -                                              -          -
 -         -       reverse ssh-tunel port forwards 8001 & 8002 to server 1-                        -                                              -          -       
@@ -66,6 +66,22 @@ example of reverse port forwarding port 8002 through ssh tunnel:
 ```
 ssh -N -R 8002:localhost:8002 username@ip_for_lan
 ```
+
+because my server-1 is a google-vm i need to specify some more parameters to do the same as the above.
+
+exampel of port forwarding port 8002 through a ssh tunel to port 8002:
+```
+ssh -i google_compute_engine -o UserKnownHostsFile=/dev/null   -o CheckHostIP=no -o StrictHostKeyChecking=no -N -R 8002:localhost:8002 username@ip_for_lan
+```
+example of reverse port forwarding port 8002 through ssh tunnel:
+```
+ssh -i .ssh/google_compute_engine -o UserKnownHostsFile=/dev/null   -o CheckHostIP=no -o StrictHostKeyChecking=no -N -L 8002:localhost:8002 username@ip_for_lan
+```
+where .ssh/google_compute_engine and google_compute_engine is the path to the file that stores the ssh-key.
+
+
+
+
 
 on my laptop i open /html/liveActionView.html in a browser and can from there controll my rc boat. 
 
