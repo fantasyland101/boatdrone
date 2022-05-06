@@ -67,18 +67,19 @@ example of reverse port forwarding port 8002 through ssh tunnel:
 ssh -N -R 8002:localhost:8002 username@ip_for_lan
 ```
 
+
+
 because my server-1 is a google-vm i need to specify some more parameters to do the same as the above.
 
-exampel of port forwarding port 8002 through a ssh tunel to port 8002:
+exampel of port forwarding port 8002 through a ssh tunel to port 8002 (google vm):
 ```
 ssh -i google_compute_engine -o UserKnownHostsFile=/dev/null   -o CheckHostIP=no -o StrictHostKeyChecking=no -N -R 8002:localhost:8002 username@ip_for_lan
 ```
-example of reverse port forwarding port 8002 through ssh tunnel:
+example of reverse port forwarding port 8002 through ssh tunnel (google vm):
 ```
 ssh -i .ssh/google_compute_engine -o UserKnownHostsFile=/dev/null   -o CheckHostIP=no -o StrictHostKeyChecking=no -N -L 8002:localhost:8002 username@ip_for_lan
 ```
 where .ssh/google_compute_engine and google_compute_engine is the path to the file that stores the ssh-key.
-
 
 
 
