@@ -66,8 +66,7 @@ example of reverse port forwarding port 8002 through ssh tunnel:
 ```
 ssh -N -R 8002:localhost:8002 username@ip_for_lan
 ```
-
-
+---
 
 because my server-1 is a google-vm i need to specify some more parameters to do the same as the above.
 
@@ -81,8 +80,7 @@ ssh -i .ssh/google_compute_engine -o UserKnownHostsFile=/dev/null   -o CheckHost
 ```
 where .ssh/google_compute_engine and google_compute_engine is the path to the file that stores the ssh-key.
 
-
-
+---
 
 on my laptop i open /html/liveActionView.html in a browser and can from there controll my rc boat. 
 
