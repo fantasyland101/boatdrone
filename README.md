@@ -31,7 +31,7 @@ then install this github-reposotary. I recomend using wget. the backend folder i
 run the 2 webbsocketservers in boatdrone/backend on rasspberry pi (python3 [filepath]). These websocketservers **have no security whatsoever** therefore only comunicate with these servers on trusted networks.
 
 My network setup:
-
+```
 -------------------------------------------------INTERNET----------------------------------------------------------------------------------------------------
 -                                                                                                                                                           -
 -         ---old-phone-4g-hotspot. (no network port forward)--------------                        --------lan. PORT 20 forwarded to server-1. ----          -
@@ -57,7 +57,7 @@ My network setup:
 -                                                                                                                                                           -
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+```
 exampel of port forwarding port 8002 through a ssh tunel to port 8002:
 ```
 ssh -N -L 8002:localhost:8002 username@ip_for_lan
