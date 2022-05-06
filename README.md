@@ -27,8 +27,12 @@ sudo apt install gpsd-clients to test out gpsd without python
 
 # Installation
 run all pythonscripts in /backend on rasspberry pi. These are 2 websocketservers and **have no security whatsoever**.  
-Therefore I have my pi connected to a trusted network and then I port forward the websocketserver-ports to my laptop on another network through an ssh tunnel. This ensures that the websocket is secure.
+Therefore I have my pi connected to a trusted network and then I port forward the websocketserver-ports to my laptop (on another network) through an ssh tunnel. This ensures that the websocket is secure.
 
+exampel of port forwarding port 2947 through a ssh tunel to port 2947:
+```
+ssh -N -L 2947:localhost:2947 pi@192.168.1.124
+```
 
 on my laptop i open /html/liveActionView.html in a browser and can from there controll my rc boat. 
 
