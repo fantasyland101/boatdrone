@@ -2,7 +2,8 @@
 A frontend and backend for controling a rc-boat and getting live video feed and data using websockets and server side event's.
 **The code is still not ready for use.**
 
-# depencys
+# installation
+## depencys
 python3, python3-dev, gpsd (talks to my usb gps), opencv (AI libary, used for usb-webbcam video), numpy (needed for opencv)
 
 how i got these dependencys installed on my rasspberry-pi-2:
@@ -24,11 +25,14 @@ how i got these dependencys installed on my rasspberry-pi-2:
 ```
 you may need to allow serial in raspi-config (sudo raspi-config) to get the usb-gps to work. gpsd aplications takes some (3-6 seconds) time to lanch!
 sudo apt install gpsd-clients to test out gpsd without python
+## what to do with this reposotary
+then install this github-reposotary. I recomend using wget for this.
+The boatdrone/backend is suposed to be install on the server (rassberry pi)
 
-then install this github-reposotary. I recomend using wget. the backend folder is suposed to be install on the rassberry pi and the rest on the client computer.
+and the rest is suposed to be on the client.
 
-# Installation
-run the 2 webbsocketservers in boatdrone/backend on rasspberry pi (python3 [filepath]). These websocketservers **have no security whatsoever** therefore only comunicate with these servers on trusted networks.
+# running / setup
+run the 2 webbsocketservers in boatdrone/backend on rasspberry pi (python3 [filepath]). These websocketservers **have no security whatsoever** therefore only comunicate with these servers on trusted networks. Encapsulate the trafic in some safe way if you are sending it through unsafe networks (like the internet) I use ssh tunneling for this but some sort of vpn solution should also work.
 
 My network setup:
 ```
@@ -86,5 +90,8 @@ where .ssh/google_compute_engine and google_compute_engine is the path to the fi
 on my laptop i open /html/liveActionView.html in a browser and can from there controll my rc boat. 
 
 I take no liability in you using this repo in any way shape or form. 
+
+## autossh
+autossh is a program that can reverse port forward automaticaly and reconect a disconected  ssh reverse port forward. I plan to use this in the future 
 
 thank you random person for this gpsd-python libary: https://github.com/MartijnBraam/gpsd-py3
