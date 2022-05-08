@@ -96,3 +96,6 @@ I take no liability in you using this repo in any way shape or form.
 autossh is a program that can reverse port forward automaticaly and reconect a disconected  ssh reverse port forward. I plan to use this in the future 
 
 thank you random person for this gpsd-python libary: https://github.com/MartijnBraam/gpsd-py3
+
+# Hardware
+pin 17 and 18 send out pwm to control 1 servo and one rc-motor-controller (not tested).
