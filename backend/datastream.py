@@ -5,6 +5,7 @@ import cv2
 from time import sleep
 import gpsd
 from gpiozero import CPUTemperature
+import struct
 
 #maybee multiple conections if not multiple VIDEOCAPTURES
 async def handler(websocket): #called when conection is established 
