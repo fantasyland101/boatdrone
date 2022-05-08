@@ -259,37 +259,45 @@ class Map{
     }
 }
 
-class Sockets{
-    webbsocket;
-    webbsock2;
+class Sockets{ //class for controlling webbsockets
+    webbsocket_stream; //a continus data stream of data such as video, gps_position etc. 
+    webbsocket_control; //a socket for controlling the server (a rc boat).
     throttle;
     gimble;
-    constructor(webbsocket){
-        this.webbsocket=webbsocket;
-        this.webbsock2 = new WebSocket('ws://192.168.1.124:8001')
+    constructor(webbsocket_stream,webbsocket_control){
+        this.webbsocket_stream=webbsocket_stream;
+        this.webbsocket_control = webbsocket_control;
         this.throttle=0;
         this.gimble=0;
+
+        this.webbsocket_stream.addEventListener('error',function(e){
+            console.log(e);
+        }); 
+        this.webbsocket_control.addEventListener('error',function(e){
+            console.log(e);
+        }); 
     }
-    giveDataThrottle(throttle){
+
+    giveDataThrottle(throttle){ //change throttle 
         this.giveData(throttle,this.gimble)
     }
-    giveDataGimble(gimble){
+    giveDataGimble(gimble){ //change gimble
         this.giveData(this.throttle,gimble)
     }
 
-    giveData(throttle,gimble){
+    giveData(throttle,gimble){ //change throttle and gimble at the same time.
         this.throttle= throttle;
         this.gimble = gimble;
         console.log("throttle: "+throttle+", gimble:"+gimble);
         var data = new Int32Array([throttle,gimble]);   
         try{
-            this.webbsock2.send(data);
+            this.webbsocket_control.send(data);
         }catch(error){
             console.error(error)
         }
-
     }
 }
+
 class Temprature{
     tempratureElement;
 
@@ -462,11 +470,7 @@ class SliderInput{
             this.sliderObj[i].addEventListener("touchend", function(e){me.touchEnd(e);}, false);
             this.sliderObj[i].addEventListener("touchcancel", function(e){me.touchCancel(e);}, false);
             this.sliderObj[i].addEventListener("touchmove", function(e){me.touchMove(e);}, false);
-            this.sliderObj[i].addEventListener("input",function(e){me.mouseInput(e);}, false);
-
-            //this.socket.throttle =  this.sliderObj[0].value;
-            //this.socket.gimble = this.sliderObj[1].value;
-        
+            this.sliderObj[i].addEventListener("input",function(e){me.mouseInput(e);}, false);        
         }
     }
 
@@ -506,9 +510,10 @@ class SliderInput{
     }
     touchMove(e){
         if(e.targetTouches.length==1){
+            console.log("hi");
             for(let i=0; i<this.touchPoints.length; i++){
                 if(this.touchPoints[i].target == e.target){
-                    if( e.target.hasAttribute('orient') && e.target.getAttribute('orient') == "vertical") //
+                    if( e.target.hasAttribute('orient') && e.target.getAttribute('orient') == "vertical") 
                     {
                         var height= e.target.offsetHeight;
                         var range = e.target.max -e.target.min;
@@ -516,7 +521,7 @@ class SliderInput{
                         
                         var unitchange= Math.round((this.touchPoints[i].pageY - e.targetTouches[0].pageY)*unit);
                         e.target.value=  parseInt(e.target.value)+unitchange;
-                        socket.giveDataSpeed(e.target.value);
+                        socket.giveDataThrottle(e.target.value);
                     }
                     else{
                         height= e.target.offsetWidth;
@@ -525,7 +530,7 @@ class SliderInput{
                         
                         unitchange= Math.round((this.touchPoints[i].pageX - e.targetTouches[0].pageX)*unit);
                         e.target.value=  parseInt(e.target.value)-unitchange;
-                        socket.giveDataRotation(e.target.value);
+                        socket.giveDataGimble(e.target.value);
                     }
                     this.touchPoints[i]= e.targetTouches[0];
                 }
@@ -587,8 +592,9 @@ class GamepadInput{
 
     }
     async CheckGamepadInput(){
+        const accuracyIndex = 0.05;//how small should a input change be before you should send the data to the server.
         while(this.controller != null && this.enabled){
-            if( Math.abs(this.throttleInput - this.controller.axes[this.throttleAxe]) > 0.05 || Math.abs(this.gimbleInput - this.controller.axes[this.gimbleAxe]) > 0.05 )
+            if( Math.abs(this.throttleInput - this.controller.axes[this.throttleAxe]) > accuracyIndex || Math.abs(this.gimbleInput - this.controller.axes[this.gimbleAxe]) > accuracyIndex )
                 {
                     this.throttleInput = this.controller.axes[this.throttleAxe];
                     this.gimbleInput = this.controller.axes[this.gimbleAxe];
@@ -728,7 +734,7 @@ class KeyboardInput{
 
 
 
-let socket = new Sockets( new WebSocket('ws://192.168.1.124:8002'));
+let socket;
 let settings;
 let camera;
 let slider;
@@ -740,7 +746,8 @@ let temprature;
 
 window.addEventListener('load', function(){
     
-    map = new Map([59.74075673613076, 19.173589129896786],14,true);
+    socket = new Sockets( new WebSocket('ws://localhost:8002'), new WebSocket('ws://localhost:8001'));
+    map = new Map([0,0],14,true);
 
     camera = new Camera(document.getElementById("camera"));  
     slider = new SliderInput(socket,document.getElementsByClassName("slider"), document.querySelectorAll('[type="checkbox"]')[0] );
@@ -752,18 +759,13 @@ window.addEventListener('load', function(){
     {
         bindedKeys[i-2]=document.querySelectorAll('[type="button"]')[i].value;
     }
-    
     keyboard = new KeyboardInput(socket,bindedKeys);
 
     settings= new Settings(slider,gamepad,keyboard);
     
-    
-    socket.webbsocket.addEventListener('message',function(e){
+    socket.webbsocket_stream.addEventListener('message',function(e){
         camera.updateImgContent(e.data);
         map.updateGPS(e.data);
         temprature.updateTemprature(e.data);
     });
-    socket.webbsocket.addEventListener('error',function(e){
-        console.log(e);
-    }); 
 });
