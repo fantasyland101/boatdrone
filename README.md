@@ -87,7 +87,8 @@ where .ssh/google_compute_engine and google_compute_engine is the path to the fi
 
 ---
 
-on my laptop i open /html/liveActionView.html in a browser and can from there controll my rc boat. 
+on my laptop i open /html/liveActionView.html in firefox webb browser and can from there controll my rc boat. 
+**Some of the code only works on firefox such as input-sliders**
 
 I take no liability in you using this repo in any way shape or form. 
 
