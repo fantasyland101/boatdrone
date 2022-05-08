@@ -19,10 +19,9 @@ footer{
 }
 
 .map {
-    height: 300px;
-    width: 400px;
-    /*float:left;*/
-  }
+  height: 300px;
+  width: 300px;
+}
 
   #Camera{
     width:300px;
@@ -42,13 +41,4 @@ footer{
     background-color: lightgrey;
     font-size: 18px;
   }
-  /*
-  .right{
-    float:right;
-  }
-  .left{
-    float:left;
-  }
-  .nofloat{
-    clear:both;
-  }*/
+  

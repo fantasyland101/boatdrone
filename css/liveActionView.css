@@ -5,6 +5,7 @@ html{
   padding:0%;
   overflow: hidden;
 }
+
 body{
 width:  100%;
 height: 100%;
@@ -19,6 +20,20 @@ overflow:hidden;
   margin-top:0px;
   margin-bottom:0px;
 }
+
+#map{
+  /*align-self:flex-end;*/  
+  height: 100%;
+  width: 100%;
+  top:0px;
+  
+}
+.minimalistic{ 
+  left: calc(100% - 300px);
+  height: 300px !important;
+  width: 300px !important;
+}
+
 #camera-box{
 width:  100%;
 height: 100%;
@@ -37,13 +52,11 @@ background-color: black;
   height:100%;
   margin:0%;
   padding: 0%;
-
 }
 
 .show{
   display:block !important;
 }
-
 
 #settings-container{
   background-color: white;
@@ -57,29 +70,20 @@ background-color: black;
   padding:10px;
 }
 
-
-
-
-
-
-
-
 /*data*/
 #data{
-  width:100%;
-  height:30px;
+  width:50%;
+  height:0px;
   margin:0%;
   height:0%;
   display:flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
-
-
 
 /*Ranged slider stuff*/
 #slider-container{
   width:100%;
-  height:100%;
+  height:0%;
   margin:0%;
   padding:0%;
   display:flex;
@@ -99,9 +103,11 @@ background-color: black;
   height: 220px;
   width:47px;
 }
+
 .slider:hover {
   opacity: 1;
 }
+
 .slider{
   display:none;
 }
@@ -114,6 +120,7 @@ background-color: black;
   border: 0px;
   border-radius: 0%;
 }
+
 #gimble::-moz-range-thumb {
   -webkit-appearance: none;
   background: url('../images/button_down.png');
