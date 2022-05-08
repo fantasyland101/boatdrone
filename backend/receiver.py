@@ -1,7 +1,7 @@
-#recives data such as boat-throttle
 import asyncio
 import websockets
 import cv2
+import struct
 from gpiozero import Servo
 from time import sleep
 
@@ -14,9 +14,6 @@ async def reciver(websocket):
         data = await websocket.recv() # type bytes
         throttle = int.from_bytes(data[:4],"little")
         gimble = int.from_bytes(data[4:8],"little")
-        if(gimble ==4294967289):
-            gimble=0
-            print("gimble error")
         print("throttle: "+ str(throttle) +"  gimble: "+str(gimble)) 
 
         #send pwm to the pins
