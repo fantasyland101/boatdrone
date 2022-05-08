@@ -1,13 +1,19 @@
-<html  lang="en">
+<!DOCTYPE html>
+<html>
   <head>
     <meta charset="UTF-8">
     <title>Boat Drone</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.13.0/css/ol.css" type="text/css">
-    <link rel="stylesheet" href="../css/listview.css">
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.13.0/build/ol.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+
+    <link rel="stylesheet" href="../css/listview.css"/>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
     
     <script src="../js/listview.js"></script>
-    <script src="../js/data.js"></script>
   </head>
   <body>
     <h1>Boat Drone</h1>
@@ -23,7 +29,7 @@
     </div>
 
     <div>
-      <p class="system-header" onclick="ToggleShowOrNot('gps');  LoadMap();">gps</p>
+      <p class="system-header" onclick="ToggleShowOrNot('gps');">gps</p>
       <div id="gps" class="dropdown-content">
           <div id="map" class="map"></div>
           <p id="cordinates">cordinates: -.-</p>
@@ -54,11 +60,6 @@
           <p id="type">type: - </p>
           <p id="strength">strength: - </p>
       </div>
-    </div>
-
-    <p class="system-header" onclick="ToggleShowOrNot('controlls');">controlls</p>
-    <div id="controlls" class="dropdown-content">
-      <p>joysticks</p>
     </div>
   </div>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

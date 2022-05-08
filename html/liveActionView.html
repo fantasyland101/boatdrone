@@ -3,7 +3,28 @@
   <head>
     <title>Boatdrone</title>
     <link rel="stylesheet" href="../css/liveActionView.css">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+
+    
+    
+    
     <script src="../js/liveActionView.js"></script>
+
+
+
+
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+ 
+
+
+
   </head>
   <body>
     <div id="camera-box">
@@ -11,9 +32,15 @@
     </div>
 
     <div id ="absolute">
+
       <div id="data">
+        <p style="color:white;">ping: 22ms</p>
+        <p style="color:white;" id="temp">0 C*</p>
         <input type="image" id="settings" src="../images/settings-icon.svg"  width="30px" height="30px">
       </div>
+      
+      <div id="map"></div>
+
     
       <div id="slider-container">
           <input id="throttle" class ="slider" type="range" min="0" value="40" max="255" orient="vertical">
