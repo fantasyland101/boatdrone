@@ -90,12 +90,8 @@ where .ssh/google_compute_engine and google_compute_engine is the path to the fi
 on my laptop i open /html/liveActionView.html in firefox webb browser and can from there controll my rc boat. 
 **Some of the code only works on firefox such as input-sliders**
 
-I take no liability in you using this repo in any way shape or form. 
-
 ## autossh
 autossh is a program that can reverse port forward automaticaly and reconect a disconected  ssh reverse port forward. I plan to use this in the future 
 
-thank you random person for this gpsd-python libary: https://github.com/MartijnBraam/gpsd-py3
-
 # Hardware
-pin 17 and 18 send out pwm to control 1 servo and one rc-motor-controller (not tested).
+pin 17 and 18 send out pwm to control one servo and one rc-motor-controller (not tested).
