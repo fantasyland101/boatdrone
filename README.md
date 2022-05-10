@@ -48,7 +48,7 @@ In my case i use a 4g-phone as a internet hotspot.
 #### running the websocketservers:
 ```
 	cd boatdrone/backend
-	python3 testgps.py    (I spam this comand until my usb-gps device wake up and python stops throwing errors)
+	python3 gps-test.py    (I spam this comand until my usb-gps device wake up and python stops throwing errors)
 	python3 datastream.py
 	[i open up another terminal]
 	cd boatdrone/backend
