@@ -24,8 +24,11 @@ sudo apt install sudo apt-get install -y \
 	pip install websocket (for handling webbsockets)
 ```
 #### installing this reposotary.
-	on rassberry pi: ``` wget https://github.com/fantasyland101/boatdrone ``` (only use stuff in backend)
-	on windows use github webbsite and download reposotary as zip. then extract it and open boatdrone/html/index.html in a browser (works best in firefox). 
+	on rassberry pi: 
+```
+	wget https://github.com/fantasyland101/boatdrone
+```
+on windows use github webbsite and download reposotary as zip. then extract it and open boatdrone/html/index.html in a browser (works best in firefox). 
 #### raspi-config
 ```
 sudo raspi-config
@@ -40,7 +43,9 @@ or
 ```
 gpsmon
 ```
-the websocketservers are realy unsecure so only use them on trusted networks. In my case i use a 4g-phone as a internet hotspot.
+The websocketservers are realy unsecure so only use them on trusted networks.
+In my case i use a 4g-phone as a internet hotspot.
+#### running the websocketservers:
 ```
 	cd boatdrone/backend
 	python3 testgps.py    (I spam this comand until my usb-gps device wake up and python stops throwing errors)
