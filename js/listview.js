@@ -260,30 +260,33 @@ class WriteDataInText{
             me.speed_html.innerHTML = "speed: ?";
         };
         fileReader_long_.readAsArrayBuffer(blob.slice(0,12));
-
-
     }
-
 }
 
 
 
-
+//triggerd by html
 function ToggleShowOrNot(id) {
   document.getElementById(id).classList.toggle("show");
 }
+function LoadMap(){
+    if(map == null)
+        map= new Map([0,0],14);
+}
+
 
 var webbsocket = new WebSocket('ws://localhost:8002')
 var writeDataInText;
 var camera;
+var map =null;
 
 window.addEventListener('load',function(){
     writeDataInText = new WriteDataInText();
     camera = new Camera(document.getElementById("camera"));
 
-    var map = new Map([0,0],14);
     webbsocket.addEventListener('message',function(e){
-        map.updateGPS(e.data);
+        if(map !=null)
+            map.updateGPS(e.data);
         camera.updateImgContent(e.data);
         writeDataInText.update(e.data);
     });
