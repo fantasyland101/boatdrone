@@ -22,6 +22,7 @@ sudo apt install sudo apt-get install -y \
 	pip install opencv (for video data)
 	pip install gpiozero (for controlling rassbery pi io)
 	pip install websocket (for handling webbsockets)
+	pip3 install gpsd-py3 (for comunication with gpsd)
 ```
 #### installing this reposotary.
 	on rassberry pi: 
