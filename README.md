@@ -60,7 +60,7 @@ Therefore I have setup a google cloud server as a middlepoint.
 I will reverse port forward my rassberry-pi to it and port forward my laptop to it.
 Another solution should be using vpn-tunnel insted of ssh-tunneling. 
 
-My network setup:
+#### My network setup:
 ```
 -------------------------------------------------INTERNET----------------------------------------------------------------------------------------------------
 -                                                                                                                                                           -
@@ -109,7 +109,8 @@ example of reverse port forwarding port 8002 & 8001 through ssh tunnel to a goog
 ```
 ssh -i google_compute_engine -o UserKnownHostsFile=/dev/null -o CheckHostIP=no -o StrictHostKeyChecking=no -N  username@ip_for_lan -R 8002:localhost:8002 -R 8001:localhost:8001 
 ```
-where .ssh/google_compute_engine and google_compute_engine is the paths to the file that stores the ssh-key.
+.ssh/google_compute_engine and google_compute_engine is the paths to the file that stores the ssh-key.
+
 ---
 
 on my laptop i open /html/index.html in my firefox webb browser and can from there controll my rc boat. 
