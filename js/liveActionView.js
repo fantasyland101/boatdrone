@@ -45,8 +45,6 @@ class Map{
         document.getElementById('map').classList.toggle("minimalistic",minimalistic); //adds the minimalistic class if loadMap=> minimalistic
 
         this.map = L.map('map',{zoomControl: !minimalistic}).setView(origin, scale);
-
- 
        
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -69,8 +67,6 @@ class Map{
             }
         };
         this.map_menu.addTo(this.map);
-
-        //CUSTOM MENU EVENT LISTNERS
 
         if (minimalistic){
             this.map.scrollWheelZoom.disable()
@@ -132,14 +128,9 @@ class Map{
         }
 
         
-        if(this.marker != null && this.marker.length >0){
-
-        //reload all markers.
-        console.log(this.marker.length);
-        
+        if(this.marker != null && this.marker.length >0){        
             for(var i=0; i<this.marker.length; i++){
                 this.marker[i].addTo(this.map);
-
             }            
             this.update_tripp_type();
         }
@@ -192,7 +183,6 @@ class Map{
         this.marker.push(newMarker);
         this.update_tripp_type();
     }
-
 
     deleteMarker(index_in_marker){
         this.map.removeLayer(this.marker[index_in_marker]);
@@ -319,31 +309,73 @@ class Temprature{
 }
     
 class Settings{
-    settingsButton;
-    sliderCheckbox;
-    keyboardCheckbox;
-    gamepadCheckbox;
-    gamepad_settings_container;
-    keyboard_settings_container;
+    //html elements.
+        //buttons
+        settingsButton;
+        gamepad_axe_bind_throttle_button;
+        gampad_axe_bind_gimble_button;
+        keyboard_throttle_up_button;
+        keyboard_throttle_down_button;
+        keyboard_gimble_left_button;
+        keyboard_gimble_right_button;
+        //checkboxed
+        sliderCheckbox;
+        keyboardCheckbox;
+        gamepadCheckbox;
+        //div-s
+        gamepad_settings_container;
+        keyboard_settings_container;
+    //instances 
     slider;
     gamepad;
     keyboard;
 
     constructor(slider, gamepad, keyboard){
-        this.keyboard=keyboard;
-        this.slider=slider;
-        this.gamepad=gamepad;
+        
+        var me =this;
+
+        this.settingsButton = document.getElementById("settings");
+        this.gamepad_axe_bind_throttle_button = document.getElementById("gamepad-bind-axe-throttle");
+        this.gamepad_axe_bind_gimble_button =  document.getElementById("gamepad-bind-axe-gimble");
+        this.keyboard_throttle_up_button = document.getElementById("keyboard-forward");
+        this.keyboard_throttle_down_button = document.getElementById("keyboard-backward");
+        this.keyboard_gimble_left_button = document.getElementById("keyboard-left");
+        this.keyboard_gimble_right_button = document.getElementById("keyboard-right");
+
         this.sliderCheckbox = document.getElementById("slider-checkbox");
         this.keyboardCheckbox = document.getElementById("keyboard-checkbox");
         this.gamepadCheckbox = document.getElementById("gamepad-checkbox");
-        
-        this.settingsButton = document.getElementById("settings");
-
         this.gamepad_settings_container = document.getElementById("gamepad-settings-container");
         this.keyboard_settings_container = document.getElementById("keyboard-settings-container");
+        this.keyboard=keyboard;
+        this.slider=slider;
+        this.gamepad=gamepad;
 
-        //eventlistneners for checkboxses
-        var me =this;
+        //eventlistners
+        this.settingsButton.addEventListener('click',function(){
+            document.getElementById("settings-container").classList.toggle("show");
+        });
+        this.gamepad_axe_bind_throttle_button.addEventListener('click',function(){
+            me.gamepad.bind_axe_throttle(me.gamepad_axe_bind_throttle_button);
+        });
+        this.gamepad_axe_bind_gimble_button.addEventListener('click',function(){
+            me.gamepad.bind_axe_gimble(me.gamepad_axe_bind_gimble_button);
+        });
+        this.keyboard_throttle_up_button.addEventListener('click', function(){
+            me.keyboard.rebindKey(me.keyboard.throttle_up_key_index,me.keyboard_throttle_up_button);
+        });
+        this.keyboard_throttle_down_button.addEventListener('click', function(){
+            me.keyboard.rebindKey(me.keyboard.throttle_down_key_index,me.keyboard_throttle_down_button);
+        });
+
+        this.keyboard_gimble_left_button.addEventListener('click', function(){
+            me.keyboard.rebindKey(me.keyboard.gimble_left_key_index,me.keyboard_gimble_left_button);
+        });
+
+        this.keyboard_gimble_right_button.addEventListener('click', function(){
+            me.keyboard.rebindKey(me.keyboard.gimble_right_key_index,me.keyboard_gimble_right_button);
+        });
+
 
         this.sliderCheckbox.addEventListener('click', function(){
             me.sliderCheckboxClick();
@@ -355,12 +387,6 @@ class Settings{
         });
         this.gamepadCheckbox.addEventListener('click', function(){
             me.gamepadCheckboxClick();
-        });
-
-        //eventlistner for settings button
-        this.settingsButton.addEventListener('click',function(){
-            document.getElementById("settings-container").classList.toggle("show");
-
         });
 
         //when window load check what setting checkboxses are!
@@ -394,12 +420,10 @@ class Settings{
         this.gamepad_settings_container.classList.toggle("show",false);
         this.keyboard_settings_container.classList.toggle("show",true);
         this.gamepad.disable();
-        console.log(this.keyboard);
         this.keyboard.enable();
         this.slider.disable();
     }
     gamepadCheckboxClick(){
-
         this.sliderCheckbox.checked=false;
         this.keyboardCheckbox.checked=false;
         this.gamepadCheckbox.checked=false;
@@ -510,7 +534,6 @@ class SliderInput{
     }
     touchMove(e){
         if(e.targetTouches.length==1){
-            console.log("hi");
             for(let i=0; i<this.touchPoints.length; i++){
                 if(this.touchPoints[i].target == e.target){
                     if( e.target.hasAttribute('orient') && e.target.getAttribute('orient') == "vertical") 
@@ -574,7 +597,7 @@ class GamepadInput{
         this.controller = null;
         this.throttleAxe =1;
         this.gimbleAxe= 2;
-        this.throttleAxeInverted=false;
+        this.throttleAxeInverted=true;
         this.gimbleAxeInverted=false;
         this.throttleInput=0;
         this.gimbleInput=0;
@@ -589,7 +612,6 @@ class GamepadInput{
             me.controller = null;
             console.log("disconected");
         },false);
-
     }
     async CheckGamepadInput(){
         const accuracyIndex = 0.05;//how small should a input change be before you should send the data to the server.
@@ -598,9 +620,14 @@ class GamepadInput{
                 {
                     this.throttleInput = this.controller.axes[this.throttleAxe];
                     this.gimbleInput = this.controller.axes[this.gimbleAxe];
-
-                    throttle = -Math.round(this.throttleInput*255); 
-                    gimble = Math.round( this.gimbleInput*125) +125;
+                    if(this.throttleAxeInverted)
+                        throttle = -Math.round(this.throttleInput*255); 
+                    else
+                        throttle = Math.round(this.throttleInput*255); 
+                    if(this.gimbleAxeInverted)
+                        gimble = Math.round( -this.gimbleInput*125) +125;
+                    else
+                        gimble = Math.round(this.gimbleInput*125) +125;
                     if(throttle < 0)
                         throttle = 0;
                     this.socket.giveData(throttle, gimble)
@@ -619,6 +646,55 @@ class GamepadInput{
     disable(){
         this.enabled=false;
     }
+    async bind_axe_throttle(button){
+        button.style.opacity =0.7;
+        while(this.controller != null && this.enabled){
+            for(var i=0; i<this.controller.axes.length; i++)
+            {
+                
+                if( -0.9 >this.controller.axes[i])
+                {
+                    this.throttleAxeInverted = true;
+                    this.throttleAxe =i
+                    button.innerHTML = "gamepad axe throttle: " + i;
+                    button.style.opacity =1;
+                    return;
+                }
+                if(0.9 <this.controller.axes[i])
+                {
+                    this.throttleAxeInverted = false;
+                    this.throttleAxe =i
+                    button.innerHTML = "gamepad axe throttle: " + i;
+                    button.style.opacity =1;
+                    return;
+                }
+            }            
+            await new Promise(res => setTimeout(res, checkInputSpeed));
+        }     
+    }
+
+    async bind_axe_gimble(button){
+        while(this.controller != null && this.enabled){
+            for(var i=0; i<this.controller.axes.length; i++)
+            {
+                if( -0.9 >this.controller.axes[i])
+                {
+                    this.gimbleAxeInverted = true;
+                    this.gimbleAxe =i
+                    button.innerHTML = "gamepad axe gimble: " + i;
+                    return;
+                }
+                if(0.9 <this.controller.axes[i])
+                {
+                    this.gimbleAxeInverted = false;
+                    this.gimbleAxe =i
+                    button.innerHTML = "gamepad axe gimble: " + i;
+                    return;
+                }
+            }            
+            await new Promise(res => setTimeout(res, checkInputSpeed));
+        }            
+    }
 }
 
 class KeyboardInput{  
@@ -627,108 +703,136 @@ class KeyboardInput{
     gimble;               //NOT WORKING YET
     bindedKeys; //array of binded keys
     bindedKeysIsPushed; //array of true/false values of binded keys
-    aKeyIsDown;
+    lastPushedKey;
+
+
     enabled;
 
+     //not constants but acts as constants
+     throttle_up_key_index; //index in bindedkeys for the button that coresponds to throttle up.
+     throttle_down_key_index;
+     gimble_left_key_index;
+     gimble_right_key_index;     
+
     constructor(socket,bindedKeys){
+        this.lastPushedKey =null;
         this.enabled=false;
         this.socket= socket;
-        this.aKeyIsDown=true;
         this.throttle=0;
         this.gimble=0;
         this.bindedKeys=bindedKeys;
         this.bindedKeysIsPushed= [false,false,false,false];
-        //eventlisteners
         var me =this;
+
+        this.throttle_up_key_index =0; 
+        this.throttle_down_key_index =1;
+        this.gimble_left_key_index = 3;
+        this.gimble_right_key_index = 2;
+
         document.addEventListener('keydown', function(e){
-            me.keyDown(e);
-            
+            me.keyDown(e);  
         });
         document.addEventListener('keyup', function(e){
             me.keyUp(e);
         });
-        //infinate loop
-        this.keyIsDown();
+
+        this.Update();
+    }
+
+    async rebindKey(key_index, button ){ //push key to rebind
+        button.style.opacity =0.7;
+        while(true)
+        {
+            console.log("hi");
+            if(this.lastPushedKey != null)
+            {
+                this.bindedKeysIsPushed[key_index]=false;
+                this.bindedKeys[key_index] = this.lastPushedKey;
+                button.style.opacity = 1;
+                button.innerHTML = this.lastPushedKey; 
+                return;
+            }
+            await new Promise(res => setTimeout(res, checkInputSpeed));
+        }
     }
 
 
 
-
     enable(){
-        if(! this.enabled){
+        if(!this.enabled){
             this.enabled=true;
-            this.keyIsDown();
+            this.Update();
         }
     }
     disable(){
         this.enabled=false;
     }
 
-    async keyIsDown(){
+    async Update(){
         while(this.enabled){
-            for(var i=0; i<this.bindedKeysIsPushed.length; i++){
-                if(this.bindedKeysIsPushed[i]){
-                    switch(i){
-                        case 0:
-                            this.throttle++;
-                            break;
-                        case 1:
-                            this.throttle--;
-                            break;
-                        case 2:
-                            this.gimble++;
-                            break;
-                        case 3:
-                            this.gimble--;
-                            break;
-                    }
-                }
-            }
-            this.socket.giveData(this.throttle,this.gimble);
+            var throttleAdd=0;
+            var gimbleAdd =0;
+            if(this.bindedKeysIsPushed[this.throttle_up_key_index] && !this.bindedKeysIsPushed[this.throttle_down_key_index])
+                throttleAdd = 1;
+            else if(!this.bindedKeysIsPushed[this.throttle_up_key_index] && this.bindedKeysIsPushed[this.throttle_down_key_index])
+                throttleAdd = -1;
+            if(this.bindedKeysIsPushed[this.gimble_left_key_index] && !this.bindedKeysIsPushed[this.gimble_right_key_index])
+                gimbleAdd =1;
+            else if(!this.bindedKeysIsPushed[this.gimble_left_key_index] && this.bindedKeysIsPushed[this.gimble_right_key_index])
+                gimbleAdd = -1;
+             if(0>this.socket.gimble + gimbleAdd ||this.socket.gimble + gimbleAdd>255)
+                gimbleAdd=0;
+            if(0>this.socket.throttle + throttleAdd||this.socket.throttle + throttleAdd>255)
+                throttleAdd=0;
+            
+            if(throttleAdd !=0 || gimbleAdd !=0) //don't send if it we have not changed anything!
+                this.socket.giveData(this.socket.throttle+throttleAdd,this.socket.gimble + gimbleAdd);
             await new Promise(res => setTimeout(res, checkInputSpeed));
         }
     }
     keyDown(e) {
+        this.lastPushedKey = e.code;
         switch(e.code){
-            case this.bindedKeys[0]://throttle up
-                this.bindedKeysIsPushed[0]=true;
+            case this.bindedKeys[this.throttle_up_key_index]://throttle up
+                this.bindedKeysIsPushed[this.throttle_up_key_index]=true;
                 break;
-            case this.bindedKeys[1]://throttle down
-                this.bindedKeysIsPushed[1]=true;
-                //this.isKeyDown(true);
+            case this.bindedKeys[this.throttle_down_key_index]://throttle down
+                this.bindedKeysIsPushed[this.throttle_down_key_index]=true;
                 break;
-            case this.bindedKeys[2]://gimble left
-                this.bindedKeysIsPushed[2]=true;
-
+            case this.bindedKeys[this.gimble_left_key_index]://gimble left
+                this.bindedKeysIsPushed[this.gimble_left_key_index]=true;
                 break;
-            case this.bindedKeys[3]://gimble right
-                this.bindedKeysIsPushed[3]=true;
-
-                //this.isKeyDown(true);
+            case this.bindedKeys[this.gimble_right_key_index]://gimble right
+                this.bindedKeysIsPushed[this.gimble_right_key_index]=true;
                 break;
         }
     }
     keyUp(e){
-        switch(e.code){
-            case this.bindedKeys[0]://throttle up
-                this.bindedKeysIsPushed[0]=false;
-                break;
-            case this.bindedKeys[1]://throttle down
-                this.bindedKeysIsPushed[1]=false;
+        if(this.lastPushedKey == e.code)
+            this.lastPushedKey =null;
 
-                //this.isKeyDown(false);
+        
+        switch(e.code){
+            case this.bindedKeys[this.throttle_up_key_index]://throttle up
+                this.bindedKeysIsPushed[this.throttle_up_key_index]=false;
                 break;
-            case this.bindedKeys[2]://gimble left
-                this.bindedKeysIsPushed[2]=false;
-                //this.isKeyDown(false);
+            case this.bindedKeys[this.throttle_down_key_index]://throttle down
+                this.bindedKeysIsPushed[this.throttle_down_key_index]=false;
                 break;
-            case this.bindedKeys[3]://gimble right
-                this.bindedKeysIsPushed[3]=false;
-                //this.isKeyDown(false);
+            case this.bindedKeys[this.gimble_left_key_index]://gimble left
+                this.bindedKeysIsPushed[this.gimble_left_key_index]=false;
+                break;
+            case this.bindedKeys[this.gimble_right_key_index]://gimble right
+                this.bindedKeysIsPushed[this.gimble_right_key_index]=false;
                 break;
         }
     }
 }
+
+
+
+
+
 
 
 
@@ -755,10 +859,12 @@ window.addEventListener('load', function(){
     temprature = new Temprature();
 
     var bindedKeys =Array();
-    for(i=2; i<document.querySelectorAll('[type="button"]').length; i++)
-    {
-        bindedKeys[i-2]=document.querySelectorAll('[type="button"]')[i].value;
-    }
+        bindedKeys[0]= "KeyW"
+        bindedKeys[1]= "KeyS"
+        bindedKeys[2]= "KeyA"
+        bindedKeys[3]= "KeyD"
+
+
     keyboard = new KeyboardInput(socket,bindedKeys);
 
     settings= new Settings(slider,gamepad,keyboard);
