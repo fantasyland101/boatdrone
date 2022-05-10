@@ -42,7 +42,7 @@ async def main():
 
 if __name__ == "__main__":
     gpsd.connect()
-    vc = cv2.VideoCapture(0)
+    vc = cv2.VideoCapture(0) #look at this and later try to optimise: https://toptechboy.com/faster-launch-of-webcam-and-smoother-video-in-opencv-on-windows/
     if vc.isOpened(): # try to get the first frame
         rval, frame = vc.read()
     else:
