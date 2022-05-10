@@ -10,21 +10,9 @@
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-    crossorigin=""></script>
-
-    
-    
-    
+    crossorigin=""></script>  
     <script src="../js/liveActionView.js"></script>
-
-
-
-
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
- 
-
-
-
   </head>
   <body>
     <div id="camera-box">
@@ -55,15 +43,15 @@
 
       <div id="gamepad-settings-container">
         <p>gamepad settings:</p>
-        <button type="button" value="0">gamepad axe 0</button><label> press this and move a gamepad-axe foreward to remap gamepad-throttle<br></label>
-        <button type="button" value="2">gamepad axe 2</button><label> press this and move a gamepad-axe foreward to remap gamepad-gimble<br></label>
+        <button type="button" id ="gamepad-bind-axe-throttle"> gamepad axe throttle: 0</button><label> Push this and move a gamepad-axe to bind to throttle<br></label>
+        <button type="button" id="gamepad-bind-axe-gimble"> gamepad axe gimble: 2</button><label> Push this and move a gamepad-axe to bind to gimble<br></label>
       </div>
       <div id="keyboard-settings-container">  
         <p>keyboard settings:</p>
-        <button type="button" value="KeyW">w</button><label> press this and then a button to bind to throttle forward<br></label>
-        <button type="button" value="KeyS">s</button><label> press this and then a button to bind to throttle backward<br></label>
-        <button type="button" value="KeyD">d</button><label> press this and then a button to bind to gimble left<br></label>
-        <button type="button" value="KeyA">a</button><label> press this and then a button to bind to gimble right<br></label>
+        <button type="button" id="keyboard-forward">KeyW</button><label> Push this and a keyboardbutton to bind to throttle forward<br></label>
+        <button type="button" id="keyboard-backward">KeyS</button><label> Push this and a keyboardbutton to bind to throttle backward<br></label>
+        <button type="button" id="keyboard-left">KeyA</button><label> Push this and a keyboardbutton to bind to gimble left<br></label>
+        <button type="button" id="keyboard-right">KeyD</button><label> Push this and a keyboardbutton to bind to gimble right<br></label>
       </div>
 
     </div>
