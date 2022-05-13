@@ -132,4 +132,4 @@ pin 18 send out pwm to controll the motorcontroller.
 ## Hardware setup testing:
 ![circuit diagram](https://github.com/fantasyland101/boatdrone/blob/main/boat_bb.png)
 
-pin 17 and 18 send out pwm to control one servo and one rc-motor-controller (not tested).
+The batterys are not lipo flatcells but batterypacks and the motor and motorcontroller do not look like that. 
