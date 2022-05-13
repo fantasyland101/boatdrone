@@ -257,8 +257,8 @@ class Sockets{ //class for controlling webbsockets
     constructor(webbsocket_stream,webbsocket_control){
         this.webbsocket_stream=webbsocket_stream;
         this.webbsocket_control = webbsocket_control;
-        this.throttle=0;
-        this.gimble=0;
+        this.throttle=127;
+        this.gimble=127;
 
         this.webbsocket_stream.addEventListener('error',function(e){
             console.log(e);
@@ -479,7 +479,6 @@ class SliderInput{
     touchPoints; //array of last touched point of sliderObj-ects
     socket;
 
-
     constructor(socket, sliderObj, checkbox){
         this.socket=socket;
         this.sliderObj = sliderObj;
@@ -648,11 +647,11 @@ class GamepadInput{
     }
     async bind_axe_throttle(button){
         button.style.opacity =0.7;
+        const enughMovedInAxe = 0.9;
         while(this.controller != null && this.enabled){
             for(var i=0; i<this.controller.axes.length; i++)
             {
-                
-                if( -0.9 >this.controller.axes[i])
+                if( -enughMovedInAxe >this.controller.axes[i])
                 {
                     this.throttleAxeInverted = true;
                     this.throttleAxe =i
@@ -660,7 +659,7 @@ class GamepadInput{
                     button.style.opacity =1;
                     return;
                 }
-                if(0.9 <this.controller.axes[i])
+                if(enughMovedInAxe <this.controller.axes[i])
                 {
                     this.throttleAxeInverted = false;
                     this.throttleAxe =i
@@ -672,19 +671,20 @@ class GamepadInput{
             await new Promise(res => setTimeout(res, checkInputSpeed));
         }     
     }
-
     async bind_axe_gimble(button){
+        const enughMovedInAxe = 0.9;
         while(this.controller != null && this.enabled){
             for(var i=0; i<this.controller.axes.length; i++)
             {
-                if( -0.9 >this.controller.axes[i])
+                
+                if( -enughMovedInAxe >this.controller.axes[i])
                 {
                     this.gimbleAxeInverted = true;
                     this.gimbleAxe =i
                     button.innerHTML = "gamepad axe gimble: " + i;
                     return;
                 }
-                if(0.9 <this.controller.axes[i])
+                if(enughMovedInAxe <this.controller.axes[i])
                 {
                     this.gimbleAxeInverted = false;
                     this.gimbleAxe =i
@@ -735,8 +735,6 @@ class KeyboardInput{
         document.addEventListener('keyup', function(e){
             me.keyUp(e);
         });
-
-        this.Update();
     }
 
     async rebindKey(key_index, button ){ //push key to rebind
@@ -756,8 +754,6 @@ class KeyboardInput{
         }
     }
 
-
-
     enable(){
         if(!this.enabled){
             this.enabled=true;
@@ -769,24 +765,26 @@ class KeyboardInput{
     }
 
     async Update(){
+        const changePerTick = 1
         while(this.enabled){
             var throttleAdd=0;
             var gimbleAdd =0;
             if(this.bindedKeysIsPushed[this.throttle_up_key_index] && !this.bindedKeysIsPushed[this.throttle_down_key_index])
-                throttleAdd = 1;
+                throttleAdd = changePerTick;
             else if(!this.bindedKeysIsPushed[this.throttle_up_key_index] && this.bindedKeysIsPushed[this.throttle_down_key_index])
-                throttleAdd = -1;
+                throttleAdd = -changePerTick;
             if(this.bindedKeysIsPushed[this.gimble_left_key_index] && !this.bindedKeysIsPushed[this.gimble_right_key_index])
-                gimbleAdd =1;
+                gimbleAdd =changePerTick;
             else if(!this.bindedKeysIsPushed[this.gimble_left_key_index] && this.bindedKeysIsPushed[this.gimble_right_key_index])
-                gimbleAdd = -1;
-             if(0>this.socket.gimble + gimbleAdd ||this.socket.gimble + gimbleAdd>255)
+                gimbleAdd = -changePerTick;
+            if( 0 > this.socket.gimble + gimbleAdd || this.socket.gimble + gimbleAdd > 255 )
                 gimbleAdd=0;
-            if(0>this.socket.throttle + throttleAdd||this.socket.throttle + throttleAdd>255)
+            if( 0 > this.socket.throttle + throttleAdd || this.socket.throttle + throttleAdd > 255 )
                 throttleAdd=0;
             
             if(throttleAdd !=0 || gimbleAdd !=0) //don't send if it we have not changed anything!
                 this.socket.giveData(this.socket.throttle+throttleAdd,this.socket.gimble + gimbleAdd);
+            
             await new Promise(res => setTimeout(res, checkInputSpeed));
         }
     }
@@ -809,9 +807,7 @@ class KeyboardInput{
     }
     keyUp(e){
         if(this.lastPushedKey == e.code)
-            this.lastPushedKey =null;
-
-        
+            this.lastPushedKey =null;       
         switch(e.code){
             case this.bindedKeys[this.throttle_up_key_index]://throttle up
                 this.bindedKeysIsPushed[this.throttle_up_key_index]=false;
@@ -835,7 +831,7 @@ class KeyboardInput{
 
 
 
-
+//---------------MAIN--------------------------
 
 
 let socket;
