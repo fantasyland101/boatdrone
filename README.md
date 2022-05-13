@@ -23,6 +23,7 @@ sudo apt install sudo apt-get install -y \
 	pip install gpiozero (for controlling rassbery pi io)
 	pip install websocket (for handling webbsockets)
 	pip3 install gpsd-py3 (for comunication with gpsd)
+	pip install pigpio //this makes pwm less janky for gpizero. gpizero also recomend using this package. 
 ```
 #### installing this reposotary.
 	on rassberry pi: 
@@ -48,12 +49,17 @@ The websocketservers are realy unsecure so only use them on trusted networks.
 In my case i use a 4g-phone as a internet hotspot.
 #### running the websocketservers:
 ```
+	[if i wan't to use pigio]
+		sudo pigpiod //to start daemon
+		export GPIOZERO_PIN_FACTORY=pigpio //telling gpiozero to use gpiod
+
 	cd boatdrone/backend
 	python3 gps-test.py    (I spam this comand until my usb-gps device wake up and python stops throwing errors)
 	python3 datastream.py
-	[i open up another terminal]
-	cd boatdrone/backend
-	python3 receiver.py
+	
+	[open up another terminal]
+		cd boatdrone/backend
+		python3 receiver.py
 ```
 Because i wan't to etablish conection to these websockets outside the 4g-phone network in a safe way i tunnel the data through ssh.
 I do not wan't to port forward my home network and I can't port forward my 4g phone.
@@ -71,7 +77,8 @@ Another solution should be using vpn-tunnel insted of ssh-tunneling.
 -         -       port 8001 webbsocketserver 1                           -                        -            ssh-server on port 20             -          -       
 -         -       port 8002 webbsocketserver 2                           -                        -                                              -          -
 -         -       reverse ssh-tunel port forwards 8001 & 8002 to server 1-                        -                                              -          -       
--         -                                                              -                        -                                              -          -
+-         -       gpio-17 pwm for servo controll                         -                        -                                              -          -
+-         -       gpio-18 pwm for motor controll                         -                        -                                              -          -
 -         ----------------------------------------------------------------                        ------------------------------------------------          -
 -                                                                                                                                                           -
 -                                                                                                                                                           - 
@@ -117,5 +124,11 @@ ssh -i google_compute_engine -o UserKnownHostsFile=/dev/null -o CheckHostIP=no -
 on my laptop i open /html/index.html in my firefox webb browser and can from there controll my rc boat. 
 **Some of the code only works on firefox such as input-sliders**
 
-# Hardware
+# Hardware setup.
+´´´
+pin 17 send out pwm to controll the servo.
+pin 18 send out pwm to controll the motorcontroller.
+´´´
+## Hardware setup testing:
+
 pin 17 and 18 send out pwm to control one servo and one rc-motor-controller (not tested).
