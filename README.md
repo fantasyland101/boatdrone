@@ -130,6 +130,6 @@ pin 17 send out pwm to controll the servo.
 pin 18 send out pwm to controll the motorcontroller.
 ´´´
 ## Hardware setup testing:
-![circuit diagram](https://github.com/fantasyland101/boatdrone/boat_bb.jpg)
+![circuit diagram](https://github.com/fantasyland101/boatdrone/boat_bb.png)
 
 pin 17 and 18 send out pwm to control one servo and one rc-motor-controller (not tested).
