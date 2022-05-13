@@ -133,4 +133,4 @@ pin 18 send out pwm to controll the motorcontroller.
 ![circuit diagram](https://github.com/fantasyland101/boatdrone/blob/main/boat_bb.png)
 
 The batterys are not lipo flatcells but batterypacks and the motor and motorcontroller do not look like that. 
-The rasspbery pi get's it's power by micro-usb in this example and should therefore not share it's 5v pin with the microcontroller!! This is because the diferense in voltage betwean the two powersources will result in power flowing backwards through one of them. THIS IS REALY BAD
+The rasspbery pi get's it's power by micro-usb in this example and should therefore not share it's 5v pin with the microcontroller!! This is because the diferense in voltage betwean the two powersources will result in power flowing backwards through one of them. THIS IS REALY BAD. DO NOT LOAD THE SERVO WHILE TESTING. this setup is only for testing, if you load the servo while testing you may draw to mutch amprage through the 5v conector of the raspbery pi.
