@@ -130,5 +130,6 @@ pin 17 send out pwm to controll the servo.
 pin 18 send out pwm to controll the motorcontroller.
 ´´´
 ## Hardware setup testing:
+![circuit diagram](boat_test.jpg)
 
 pin 17 and 18 send out pwm to control one servo and one rc-motor-controller (not tested).
