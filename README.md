@@ -125,10 +125,19 @@ on my laptop i open /html/index.html in my firefox webb browser and can from the
 **Some of the code only works on firefox such as input-sliders**
 
 # Hardware setup.
-´´´
+```
+raspberry pi:
 pin 17 send out pwm to controll the servo.
 pin 18 send out pwm to controll the motorcontroller.
-´´´
+```
+### my hardware:
+```
+raspberry pi 2
+traxxas vxl-6s motor controller
+2 traxxas lipo power cell 25c 7.4v 5800mAh
+traxxas 540XL 2400 brushless motor
+LM2596S DC to DC stepdown power suply
+```
 ## Hardware setup testing:
 ![circuit diagram](https://github.com/fantasyland101/boatdrone/blob/main/boat.png)
 
@@ -141,6 +150,6 @@ This setup is only for testing, if you load the servo while testing you may draw
 ![circuit diagram](https://github.com/fantasyland101/boatdrone/blob/main/boat_final.png) 
 The speed controller suply 6v with a maximum of 10A. 
 Therefore the speed controller can suply all the electronics. Because the raspberry pi needs 5v we need to step down the voltage.
-I do that with a Step-Down Regulator. **DO NOT ONLY USE A LINEAR VOLTIGE REGULATOR LIKE THE EXAMPLE**.
+I do that with a Step-Down power suply. **DO NOT ONLY USE A LINEAR VOLTIGE REGULATOR LIKE THE EXAMPLE**.
 
 
