@@ -54,11 +54,7 @@ In my case i use a 4g-phone as a internet hotspot.
 		export GPIOZERO_PIN_FACTORY=pigpio //telling gpiozero to use gpiod
 
 	cd boatdrone/backend
-	python3 datastream.py
-	
-	[open up another terminal]
-		cd boatdrone/backend
-		python3 receiver.py
+	 python3 controller.py & python3 datastream.py
 ```
 Because i wan't to etablish conection to these websockets outside the 4g-phone network in a safe way i tunnel the data through ssh.
 I do not wan't to port forward my home network and I can't port forward my 4g phone.
