@@ -139,5 +139,8 @@ DO NOT LOAD THE SERVO WHILE TESTING.
 This setup is only for testing, if you load the servo while testing you may draw to mutch amprage through the 5v conector of the raspbery pi.
 ## Hardware setup final:
 ![circuit diagram](https://github.com/fantasyland101/boatdrone/blob/main/boat_final.png) 
-The speed controller suply 6v with a maximum of 10A. Therefore the speed controller can suply all the electronics. Because the raspberry pi needs 5v we need to step down the voltage. I do that with a linear voltage regulator. 
+The speed controller suply 6v with a maximum of 10A. 
+Therefore the speed controller can suply all the electronics. Because the raspberry pi needs 5v we need to step down the voltage.
+I do that with a Step-Down Regulator. **DO NOT ONLY USE A LINEAR VOLTIGE REGULATOR LIKE THE EXAMPLE**.
+
 
