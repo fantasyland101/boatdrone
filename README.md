@@ -54,7 +54,6 @@ In my case i use a 4g-phone as a internet hotspot.
 		export GPIOZERO_PIN_FACTORY=pigpio //telling gpiozero to use gpiod
 
 	cd boatdrone/backend
-	python3 gps-test.py    (I spam this comand until my usb-gps device wake up and python stops throwing errors)
 	python3 datastream.py
 	
 	[open up another terminal]
