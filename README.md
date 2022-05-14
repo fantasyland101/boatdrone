@@ -127,7 +127,7 @@ raspberry pi:
 
 ### my hardware:
 
-raspberry pi 2
+* raspberry pi 2
 * traxxas vxl-6s motor controller
 * 2 traxxas lipo power cell 25c 7.4v 5800mAh
 * traxxas 540XL 2400 brushless motor
