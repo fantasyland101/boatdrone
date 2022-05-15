@@ -19,7 +19,7 @@ sudo apt install sudo apt-get install -y \
 #### installing pip packages:
 ```
 	pip install numpy (needed for opencv)
-	pip install opencv (for video data)
+	pip install opencv-python (for video data)
 	pip install gpiozero (for controlling rassbery pi io)
 	pip install websocket (for handling webbsockets)
 	pip3 install gpsd-py3 (for comunication with gpsd)
