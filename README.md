@@ -27,7 +27,7 @@ sudo apt install sudo apt-get install -y \
 ```
 #### installing this reposotary.
 ```
-	wget https://github.com/fantasyland101/boatdrone
+	git clone https://github.com/fantasyland101/boatdrone
 ```
 only the stuff in boatdrone/backend is realy needed for the raspberry pi.
 
