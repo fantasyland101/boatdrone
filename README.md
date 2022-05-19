@@ -135,8 +135,8 @@ raspberry pi:
 * pin 18 send out pwm to controll the motorcontroller.
 
 ### my hardware:
-*computer (a laptop) 
-*old phone (running [terminux-app](https://github.com/termux/termux-app))
+* computer (a laptop) 
+* old phone (running [terminux-app](https://github.com/termux/termux-app))
 * raspberry pi 2 B
 * traxxas vxl-6s motor controller
 * 2 traxxas lipo power cell 25c 7.4v 5800mAh
