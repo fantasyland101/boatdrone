@@ -2,7 +2,7 @@
 A frontend and backend for controling a rc-boat and getting live video feed and data using websockets and server side event's.
 **The code is still not ready for use.**
 
-# installation
+# installation on rasoberry pi
 #### installing python and gpsd
 ```
 sudo apt install python3 python3-dev gpsd  (gpsd is used to comunicate with usb-gps-device)
@@ -26,16 +26,21 @@ sudo apt install sudo apt-get install -y \
 	pip install pigpio (this makes pwm less janky for gpizero) 
 ```
 #### installing this reposotary.
-	on rassberry pi: 
 ```
 	wget https://github.com/fantasyland101/boatdrone
 ```
-on windows use github webbsite and download reposotary as zip. then extract it and open boatdrone/html/index.html in a browser (works best in firefox). 
+only the stuff in boatdrone/backend is realy needed for the raspberry pi.
+
 #### raspi-config
 ```
 sudo raspi-config
 ```
 you may need to allow serial in raspi-config to get the usb-gps to work.
+
+# installation on windows
+You can click on "code", and "download as .zip" in the github page. Later extract the zip file and click on index.html in the folder structure. The webbsite was written for firefox so somethings may not work as intended on other browsers.
+
+
 # running / setup
 #### if you installed gpsd-client test gpsd with: 
 ```
