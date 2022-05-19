@@ -100,7 +100,7 @@ Another solution could be using vpn-tunnel insted of ssh-tunneling.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 ```
 
-##### Example of port forwarding.
+##### Example of port forwarding:
 Exampel of port forwarding port 8002 & 8001 through a ssh tunel to port 8002 & 8001:
 ```
 ssh -N username@ip_for_lan -L 8002:localhost:8002 -L  8001:localhost:8001
@@ -110,7 +110,7 @@ example of reverse port forwarding port 8002 & 8001 through ssh tunnel:
 ssh -N  username@ip_for_lan -R 8002:localhost:8002  -R 8001:localhost:8001
 ```
 ---
-
+##### Example of port forwarding for a google-vm:
 because my server-1 is a google-vm i need to specify some more parameters to do the same as the above.
 
 exampel of port forwarding port 8002 & 8001 through a ssh tunel to port 8002 & 8001 on a google vm:
