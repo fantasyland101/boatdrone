@@ -8,7 +8,7 @@ A frontend and backend for controling a rc-boat and getting live video feed and 
 sudo apt install python3 python3-dev gpsd  (gpsd is used to comunicate with usb-gps-device)
 sudo apt install gpsd-client (Optional! It contains gpsd-comand-line-interfaces for gps data)
 ```
-#### how i installed the packages for opencv on my rassberry pi-2 (last tested: 2022-04-20 raspberry pi bullseye):
+#### how i installed the packages for opencv on my rassberry pi-2 B (last tested: 2022-04-20 raspberry pi bullseye):
 ```
 sudo apt install sudo apt-get install -y \
 	libjpeg-dev libpng-dev libtiff-dev libgtk-3-dev \
@@ -124,7 +124,7 @@ ssh -i google_compute_engine -o UserKnownHostsFile=/dev/null -o CheckHostIP=no -
 .ssh/google_compute_engine and google_compute_engine is the paths to the file that stores the ssh-key.
 
 ##### Other stuff
-To open a shell on my raspberry-pi i ssh into it using the termux-app on my old-phone.
+To open a shell on my raspberry-pi i ssh into it using the [termux-app](https://github.com/termux/termux-app) on my old-phone.
 On my laptop i open /html/index.html in my firefox webb browser and can from there controll my rc boat. 
 **Some of the code only works on firefox such as input-sliders**
 
@@ -136,7 +136,7 @@ raspberry pi:
 
 ### my hardware:
 
-* raspberry pi 2
+* raspberry pi 2 B
 * traxxas vxl-6s motor controller
 * 2 traxxas lipo power cell 25c 7.4v 5800mAh
 * traxxas 540XL 2400 brushless motor
