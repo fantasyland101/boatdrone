@@ -23,7 +23,7 @@ sudo apt install sudo apt-get install -y \
 	pip install gpiozero (for controlling rassbery pi io)
 	pip install websocket (for handling webbsockets)
 	pip3 install gpsd-py3 (for comunication with gpsd)
-	pip install pigpio //this makes pwm less janky for gpizero. gpizero also recomend using this package. 
+	pip install pigpio (this makes pwm less janky for gpizero) 
 ```
 #### installing this reposotary.
 	on rassberry pi: 
@@ -49,20 +49,22 @@ The websocketservers are realy unsecure so only use them on trusted networks.
 In my case i use a 4g-phone as a internet hotspot.
 #### running the websocketservers:
 ```
-	[if i wan't to use pigio]
-		sudo pigpiod //to start daemon
-		export GPIOZERO_PIN_FACTORY=pigpio //telling gpiozero to use gpiod
-
-	cd boatdrone/backend
-	 python3 controller.py & python3 datastream.py
+	sudo bash boatdrone/backend/run.sh 
 ```
-Because i wan't to etablish conection to these websockets outside the 4g-phone network in a safe way i tunnel the data through ssh.
-I do not wan't to port forward my home network and I can't port forward my 4g phone.
-Therefore I have setup a google cloud server as a middlepoint.
-I will reverse port forward my rassberry-pi to it and port forward my laptop to it.
-Another solution should be using vpn-tunnel insted of ssh-tunneling. 
+This starts pigpiod-daemon, sets pigpio as default for gpiozero and starts boatdrone/backend/datastream.py and receiver.py.
+**WARINING** Anything conected to the local-network can use these websocket-servers, and they are realy unsecure.  
+
+
 
 #### My network setup:
+Because of this vonorability I have my rassberry pi conected to a secure network (my old phone).
+
+Because i wan't to etablish conection to these websockets outside the 4g-phone-network in a safe way i tunnel the data through ssh.
+I do not wan't to port forward my home network and I can't port forward my 4g phone,
+therefore I have setup a google cloud server as a middlepoint.
+I ssh-reverse-port-forward my rassberry-pi to the cloud computer and then ssh-port-forwad my laptop to the same cloud computer. This ensures a safe connection betwean the 2 devices (my raspberry pi and my computer) through the internet.
+
+Another solution could be using vpn-tunnel insted of ssh-tunneling. 
 ```
 -------------------------------------------------INTERNET----------------------------------------------------------------------------------------------------
 -                                                                                                                                                           -
@@ -89,9 +91,10 @@ Another solution should be using vpn-tunnel insted of ssh-tunneling.
 -                                                                                                                                                           -
 -                                                                                                                                                           -
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 ```
-exampel of port forwarding port 8002 & 8001 through a ssh tunel to port 8002 & 8001:
+
+##### Example of port forwarding.
+Exampel of port forwarding port 8002 & 8001 through a ssh tunel to port 8002 & 8001:
 ```
 ssh -N username@ip_for_lan -L 8002:localhost:8002 -L  8001:localhost:8001
 ```
@@ -107,16 +110,15 @@ exampel of port forwarding port 8002 & 8001 through a ssh tunel to port 8002 & 8
 ```
 ssh -i .ssh/google_compute_engine -o UserKnownHostsFile=/dev/null   -o CheckHostIP=no -o StrictHostKeyChecking=no -N username@ip_for_lan -L 8002:localhost:8002 -L 8001:localhost:8001
 ```
-
 example of reverse port forwarding port 8002 & 8001 through ssh tunnel to a google vm:
 ```
 ssh -i google_compute_engine -o UserKnownHostsFile=/dev/null -o CheckHostIP=no -o StrictHostKeyChecking=no -N  username@ip_for_lan -R 8002:localhost:8002 -R 8001:localhost:8001 
 ```
 .ssh/google_compute_engine and google_compute_engine is the paths to the file that stores the ssh-key.
 
----
-
-on my laptop i open /html/index.html in my firefox webb browser and can from there controll my rc boat. 
+##### Other stuff
+To open a shell on my raspberry-pi i ssh into it using the termux-app on my old-phone.
+On my laptop i open /html/index.html in my firefox webb browser and can from there controll my rc boat. 
 **Some of the code only works on firefox such as input-sliders**
 
 # Hardware setup.
