@@ -138,10 +138,11 @@ raspberry pi:
 * computer (a laptop) 
 * old phone (running [terminux-app](https://github.com/termux/termux-app))
 * raspberry pi 2 B
+* LM2596S DC to DC stepdown power suply
+* usb-gps BU-353S4
 * traxxas vxl-6s motor controller
 * 2 traxxas lipo power cell 25c 7.4v 5800mAh
 * traxxas 540XL 2400 brushless motor
-* LM2596S DC to DC stepdown power suply
 
 ## Hardware setup testing:
 ![circuit diagram](https://github.com/fantasyland101/boatdrone/blob/main/boat.png)
