@@ -66,12 +66,10 @@ This starts pigpiod-daemon, sets pigpio as default for gpiozero and starts boatd
 #### My network setup:
 Because of this vonorability I have my rassberry pi conected to a secure network (my old phone).
 
-Because i wan't to etablish conection to these websockets outside the 4g-phone-network in a safe way i tunnel the data through ssh.
-I do not wan't to port forward my home network and I can't port forward my 4g phone,
+Because i wan't to etablish conection to these websockets outside the phone-network in a safe way i tunnel the data through ssh.
+I do not wan't to port forward my home network and I can't port forward my phone because my isp does not allow it,
 therefore I have setup a google cloud server as a middlepoint.
 I ssh-reverse-port-forward my rassberry-pi to the cloud computer and then ssh-port-forwad my laptop to the same cloud computer. This ensures a safe connection betwean the 2 devices (my raspberry pi and my computer) through the internet.
-
-Another solution could be using vpn-tunnel insted of ssh-tunneling. 
 ```
 -------------------------------------------------INTERNET----------------------------------------------------------------------------------------------------
 -                                                                                                                                                           -
@@ -136,7 +134,7 @@ raspberry pi:
 
 ### my hardware:
 * computer (a laptop) 
-* old phone (running [terminux-app](https://github.com/termux/termux-app))
+* old phone (running [terminux-app](https://github.com/termux/termux-app) connected to the internet through 4g)
 * raspberry pi 2 B
 * LM2596S DC to DC stepdown power suply
 * usb-gps BU-353S4
