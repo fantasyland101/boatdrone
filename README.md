@@ -38,9 +38,9 @@ sudo raspi-config
 you may need to allow serial in raspi-config to get the usb-gps to work.
 
 # installation on windows
-You can click on "code", and "download as .zip" in the github page. Later extract the zip file and click on index.html in the folder structure. 
+You can click on "code", and "download as .zip" in the github page. Later extract the zip file and open boatdrone/frontend/html/index.html in the browser. 
 The webbsite was written for firefox so somethings may not work as intended on other browsers.
- The /css /html /images /js folders are the only things needed in this repository to controll the boat. 
+ The things in the boatdrone/frontend folders are the only things needed for the boat controlling computer. 
 
 # running / setup
 #### if you installed gpsd-client test gpsd with: 
