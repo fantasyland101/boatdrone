@@ -1,0 +1,44 @@
+h1{
+  text-align:center;
+}
+body{
+  margin-top:3%;
+  margin-left:5%;
+  margin-right:5%;
+}
+footer{
+  
+  background-color:lightblue;
+  display:flex;
+  justify-content: space-around;
+  padding-top:0%;
+  padding-bottom:0%;
+}
+.footer-element{
+  font-size: 22px;
+}
+
+.map {
+  height: 300px;
+  width: 300px;
+}
+
+  #Camera{
+    width:300px;
+    height:300px;
+  }
+
+  .dropdown-content{
+    display: none;
+  }
+  .show{
+    display:block;
+  }
+  .system-header{
+    padding-left:1%;
+    padding-top:0.5%;
+    padding-bottom:0.5%;
+    background-color: lightgrey;
+    font-size: 18px;
+  }
+  

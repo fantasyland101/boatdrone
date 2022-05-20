@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Boat Drone</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+
+    <link rel="stylesheet" href="../css/listview.css"/>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    
+    <script src="../js/listview.js"></script>
+  </head>
+  <body>
+    <h1>Boat Drone</h1>
+
+<p id="dump"></p>
+
+    <div>
+        <p class="system-header" onclick="ToggleShowOrNot('video-stream');">video stream</p>
+        <div id="video-stream" class="dropdown-content">
+            <p>camera 1:</p>
+            <img id="camera" src="../images/skogsmus.jpg" width="" height="" ></img>
+        </div>
+    </div>
+
+    <div>
+      <p class="system-header" onclick="ToggleShowOrNot('gps'); LoadMap();">gps</p>
+      <div id="gps" class="dropdown-content">
+          <div id="map" class="map"></div>
+          <p id="cordinates">cordinates: -.-</p>
+          <p id="angle" class ="">angle: -</p>
+          <p id="speed" >speed: -</p>
+          
+          <div class="nofloat"></div>
+          <button >autopilot</button>
+
+      </div>
+    </div>
+
+    <div>
+      <p class="system-header" onclick="ToggleShowOrNot('battery');">data</p>
+      <div id="battery" class="dropdown-content">
+          <p id="voltage">voltage: - </p>
+          <p id="amparage">amparage - </p>
+          <p id="time-until-death">time estimate until death: - </p>
+          <p id="motor-temprature">motor temprature: -</p>
+          <p id="motor-rpm">motor rpm: - </p>
+          <p id="temprature">temprature: -</p>
+      </div>
+    </div>
+
+    <div>
+      <p class="system-header" onclick="ToggleShowOrNot('connection');">conection</p>
+      <div id="connection" class="dropdown-content">
+          <p id="type">type: - </p>
+          <p id="strength">strength: - </p>
+      </div>
+    </div>
+  </div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  <footer>
+    <p class="footer-element"><a href="index.html">Home</a><p>
+    <p class="footer-element"><a href ="liveactionview.html">Live Action View</a><p>
+    <p class="footer-element"><a href ="videoOnly.html">Video Only</a><p></p>
+  </footer>
+  
+  </body>
+</html>
