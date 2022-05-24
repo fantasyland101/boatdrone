@@ -1,9 +1,14 @@
 const checkInputSpeed=10;
 
 class Map{
-    marker; //ORDERD!! array of markers
-    selectedMarker;  
-    boatMarker;
+
+    marker; // ORDERD!! array of markers for the route  
+    selectedMarker; //marker in marker[] that user has clicked
+
+    boatMarker; //a custom marker of the position of boat. do not exist in marker[]
+    boatPositionHistory; //saves position for all gps-positions the boat has had. ORDERD!
+
+
     map;
     map_menu;
     routeLine;
@@ -18,7 +23,7 @@ class Map{
         this.scale = scale
 
         this.loadMap(origin, scale,minimalistic);
-        
+
         this.boatMarker=null;
         this.boatMarkerImage = L.icon({
             iconUrl: '../images/boat..jpg',
@@ -30,10 +35,11 @@ class Map{
         this.selectedMarker=null;
         this.routeLine=null;
         this.marker= new Array();
+        this.boatPositionHistory = new Array();
         this.tripp_type=0;
 
         for(var i=0; i<nodes.length; i++){
-            this.addMarker(nodes[i]);
+            this.addMarkerToMap(nodes[i]);
         }        
     }
 
@@ -123,7 +129,7 @@ class Map{
                 }
             });
             this.add_marker_button.addEventListener('click',function(){ //somhow makes event listeners crach!!
-                me.addMarker(me.map.getCenter());
+                me.addMarkerToMap(me.map.getCenter());
             });
         }
 
@@ -143,10 +149,14 @@ class Map{
         var fileReader_long_ = new FileReader();
         fileReader_long_.onload = function() {
             const data = new Float32Array(this.result);
+
+            updateBoatPositionHistory(data[0], data[1]);
+
             if( me.boatMarker == null && data[0] !=null && data[1] !=null)
             {
-                me.addMarker([data[0],data[1]],true);
+                me.addMarkerToMap([data[0],data[1]],true);
                 me.map.setView([data[0],data[1]],me.scale);
+                
             }
             else if(data[0] !=null && data[1] !=null)
                 me.boatMarker.setLatLng([data[0],data[1]]);
@@ -154,7 +164,19 @@ class Map{
         fileReader_long_.readAsArrayBuffer(blob.slice(0,8));
     }
 
-    addMarker(position, boatmarker = false){
+    updateBoatPositionHistory(xPos,yPos){
+        let arrayLength = me.boatPositionHistory.length;
+        var doNotRun = arrayLength == null
+            || me.boatPositionHistory[arrayLength][0] == xPos
+            || me.boatPositionHistory[arrayLength][1] == yPos;
+        if(doNotRun )
+            return;
+        
+        me.boatPositionHistory[arrayLength][0] = xPos;
+        me.boatPositionHistory[arrayLength][1] = yPos;  
+    }
+
+    addMarkerToMap(position, boatmarker = false){ //boatmarker = 
         if(boatmarker){
             this.boatMarker = L.marker(position, {icon: this.boatMarkerImage});
             this.boatMarker.addTo(this.map);
@@ -174,7 +196,7 @@ class Map{
             }
             else{
                 for(var i =0; i<me.marker.length; i++)
-                    if(me.marker[i]=== this)
+                    if(me.marker[i] === this)
                         me.selectedMarker =i;
                 this.setOpacity(0.6);
             }
@@ -458,11 +480,11 @@ class Camera{
         if(a > b) { //if a has bigger aspect ratio
             this.img.width= document.body.clientWidth;
             this.img.height =document.body.clientWidth/a
+            return;
         }
-        else{
-            this.img.height = document.body.clientHeight;
-            this.img.width = document.body.clientHeight*a;
-        }
+        this.img.height = document.body.clientHeight;
+        this.img.width = document.body.clientHeight*a;
+        
     }
     updateImgContent(blob){ 
         var urlCreator = window.URL || window.webkitURL;
@@ -513,70 +535,71 @@ class SliderInput{
         if( e.target.hasAttribute('orient') && e.target.getAttribute('orient') == "vertical") 
         {
             socket.giveDataThrottle(e.target.value);
+            return;
         }
-        else{
-            socket.giveDataGimble(e.target.value);
-        }
+        socket.giveDataGimble(e.target.value);
     }
 
     touchCancel(e){/**https://developer.mozilla.org/en-US/docs/Web/API/Touch_events */
         for(let i=0; i<this.touchPoints.length; i++)
-        if(this.touchPoints[i].target== e.target){
-            this.touchPoints.splice(i, 1);
-        }
+            if(this.touchPoints[i].target== e.target)
+                this.touchPoints.splice(i, 1);     
     }
+
     touchEnd(e){ //removes the point from the toutchPoint array
         for(let i=0; i<this.touchPoints.length; i++)
-            if(this.touchPoints[i].target== e.target){
+            if(this.touchPoints[i].target== e.target)
                 this.touchPoints.splice(i, 1);
-            }
     }
+
     touchMove(e){
-        if(e.targetTouches.length==1){
-            for(let i=0; i<this.touchPoints.length; i++){
-                if(this.touchPoints[i].target == e.target){
-                    if( e.target.hasAttribute('orient') && e.target.getAttribute('orient') == "vertical") 
-                    {
-                        var height= e.target.offsetHeight;
-                        var range = e.target.max -e.target.min;
-                        var unit =range/height;
+        if(e.targetTouches.length != 1)
+            return;
+        
+        for(let i=0; i<this.touchPoints.length; i++){
+            if(this.touchPoints[i].target == e.target){
+                if( e.target.hasAttribute('orient') && e.target.getAttribute('orient') == "vertical") 
+                {
+                    var height= e.target.offsetHeight;
+                    var range = e.target.max -e.target.min;
+                    var unit =range/height;
                         
-                        var unitchange= Math.round((this.touchPoints[i].pageY - e.targetTouches[0].pageY)*unit);
-                        e.target.value=  parseInt(e.target.value)+unitchange;
-                        socket.giveDataThrottle(e.target.value);
-                    }
-                    else{
-                        height= e.target.offsetWidth;
-                        range = e.target.max -e.target.min;
-                        unit =range/height;
-                        
-                        unitchange= Math.round((this.touchPoints[i].pageX - e.targetTouches[0].pageX)*unit);
-                        e.target.value=  parseInt(e.target.value)-unitchange;
-                        socket.giveDataGimble(e.target.value);
-                    }
+                    var unitchange= Math.round((this.touchPoints[i].pageY - e.targetTouches[0].pageY)*unit);
+                    e.target.value=  parseInt(e.target.value)+unitchange;
+                    socket.giveDataThrottle(e.target.value);
                     this.touchPoints[i]= e.targetTouches[0];
+                    continue;
                 }
+                
+            height= e.target.offsetWidth;
+            range = e.target.max -e.target.min;
+            unit =range/height;
+                        
+            unitchange= Math.round((this.touchPoints[i].pageX - e.targetTouches[0].pageX)*unit);
+            e.target.value=  parseInt(e.target.value)-unitchange;
+            socket.giveDataGimble(e.target.value);
+            this.touchPoints[i]= e.targetTouches[0];
             }
         }
     }
     touchStart(e){
         e.preventDefault();
-        if(e.targetTouches.length==1)
+        if(e.targetTouches.length != 1)
+            return;
+        var noToutchWithTarget=true;
+        for(let i=0; i<this.touchPoints.length; i++)
         {
-            var noToutchWithTarget=true;
-            for(let i=0; i<this.touchPoints.length; i++)
+            if(this.touchPoints[i].target == e.target)
             {
-                if(this.touchPoints[i].target == e.target)
-                {
-                    this.touchPoints[i]= e.targetTouches[0];
-                    noToutchWithTarget=false;
-                }
+                this.touchPoints[i]= e.targetTouches[0];
+                noToutchWithTarget=false;
             }
-            if(noToutchWithTarget)
-            this.touchPoints.push(e.targetTouches[0]);
         }
+        if(noToutchWithTarget)
+            this.touchPoints.push(e.targetTouches[0]);
     }
 }
+
 
 class GamepadInput{
     socket;
@@ -615,24 +638,30 @@ class GamepadInput{
     async CheckGamepadInput(){
         const accuracyIndex = 0.05;//how small should a input change be before you should send the data to the server.
         while(this.controller != null && this.enabled){
-            if( Math.abs(this.throttleInput - this.controller.axes[this.throttleAxe]) > accuracyIndex || Math.abs(this.gimbleInput - this.controller.axes[this.gimbleAxe]) > accuracyIndex )
-                {
-                    this.throttleInput = this.controller.axes[this.throttleAxe];
-                    this.gimbleInput = this.controller.axes[this.gimbleAxe];
-                    if(this.throttleAxeInverted)
-                        throttle = -Math.round(this.throttleInput*255); 
-                    else
-                        throttle = Math.round(this.throttleInput*255); 
-                    if(this.gimbleAxeInverted)
-                        gimble = Math.round( -this.gimbleInput*125) +125;
-                    else
-                        gimble = Math.round(this.gimbleInput*125) +125;
-                    if(throttle < 0)
-                        throttle = 0;
-                    this.socket.giveData(throttle, gimble)
+            var Run =  Math.abs(this.throttleInput - this.controller.axes[this.throttleAxe]) > accuracyIndex
+                || Math.abs(this.gimbleInput - this.controller.axes[this.gimbleAxe]) > accuracyIndex;
 
-                }                
-            await new Promise(res => setTimeout(res, checkInputSpeed));
+            if(Run)
+            {
+            this.throttleInput = this.controller.axes[this.throttleAxe];
+            this.gimbleInput = this.controller.axes[this.gimbleAxe];
+            if(this.throttleAxeInverted)
+                throttle = -Math.round(this.throttleInput*255); 
+            else
+                throttle = Math.round(this.throttleInput*255); 
+            
+            if(this.gimbleAxeInverted)
+                gimble = Math.round( -this.gimbleInput*125) +125;
+            else
+                gimble = Math.round(this.gimbleInput*125) +125;
+            
+            if(throttle < 0)
+                throttle = 0;
+            
+            this.socket.giveData(throttle, gimble)
+
+            }                
+        await new Promise(res => setTimeout(res, checkInputSpeed));
         }
         this.enabled = false;
     }
@@ -755,10 +784,11 @@ class KeyboardInput{
     }
 
     enable(){
-        if(!this.enabled){
-            this.enabled=true;
-            this.Update();
-        }
+        if(this.enabled)
+            return;
+
+        this.enabled=true;
+        this.Update();
     }
     disable(){
         this.enabled=false;
@@ -824,11 +854,6 @@ class KeyboardInput{
         }
     }
 }
-
-
-
-
-
 
 
 //---------------MAIN--------------------------
