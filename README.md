@@ -156,12 +156,13 @@ The speed controller suply 6v with a maximum of 10A.
 Therefore the speed controller can suply all the electronics. Because the raspberry pi needs 5v we need to step down the voltage.
 I do that with a Step-Down power suply. **DO NOT ONLY USE A LINEAR VOLTIGE REGULATOR LIKE THE EXAMPLE**.
 
-# Things to impro:
-add tls 1.3
-add https - server.
-make all python scripts run as threads from a main script.
-create a script to autocontroll the boat to follow the assigned path.
-use opencv to detect land, boats, humans, faces, debree or other intresting stuff. 
-make the opencv run faster
-make the scripts read the config file and act acordingly
+# Things to improve:
+* add tls 1.3
+* add https - server.
+* make all python scripts run as threads from a main script.
+* create a script to autocontroll the boat to follow the assigned path.
+* use opencv to detect land, boats, humans, faces, debree or other intresting stuff. 
+* make the opencv video run faster
+* make the scripts read the config file and act acordingly
+* add suport for open-gopro
 
