@@ -48,7 +48,7 @@ if __name__ == "__main__":
         break
 
     vc = cv2.VideoCapture(0)
-    if vc is None or not vc.Opened():
+    if vc is None or not vc.isOpened():
         rval = false
     else: # try to get the first frame
         rval, frame = vc.read()
