@@ -48,9 +48,9 @@ if __name__ == "__main__":
         break
 
     vc = cv2.VideoCapture(0)
-    if vc is None or not vc.Opened():
-        rval = false
-    else # try to get the first frame
+    if vc is None or not vc.isOpened():
+        rval = False
+    else: # try to get the first frame
         rval, frame = vc.read()
         
     asyncio.run(main())  #entry point of main
