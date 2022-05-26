@@ -1,188 +1,95 @@
 const checkInputSpeed=10;
 
-class Map{
+class GPS{ //this instance is used by MAP
+    boatMarker;
+    boatMarkerImage; //custom image
+    gpsPositions; //gps history, orderd. 
+    map; //instance of class map controller. 
 
-    marker; // ORDERD!! array of markers for the route  
-    selectedMarker; //marker in marker[] that user has clicked
+    constructor(map){
+        this.map= map;
+        this.gpsPositions= Array();
+        this.boatMarker= null;
 
-    boatMarker; //a custom marker of the position of boat. do not exist in marker[]
-    boatPositionHistory; //saves position for all gps-positions the boat has had. ORDERD!
-
-
-    map;
-    map_menu;
-    routeLine;
-    tripp_type; //0=circle 1=order 2=fastest
-    add_marker_button;
-    delete_marker_button;
-    tripp_type_button;
-    minimalistic;
-
-    
-    constructor(origin, scale, minimalistic=false ,nodes=[]){
-        this.scale = scale
-
-        this.loadMap(origin, scale,minimalistic);
-
-        this.boatMarker=null;
         this.boatMarkerImage = L.icon({
             iconUrl: '../images/boat..jpg',
             iconSize: [56, 48],
             iconAnchor: [28, 24],
             popupAnchor: [-3, -76],
         });
-
-        this.selectedMarker=null;
-        this.routeLine=null;
-        this.marker= new Array();
-        this.boatPositionHistory = new Array();
-        this.tripp_type=0;
-
-        for(var i=0; i<nodes.length; i++){
-            this.addMarkerToMap(nodes[i]);
-        }        
-    }
-
-    loadMap(origin,scale,minimalistic=false){
-        const d = new Date();
-        var StartTime = d.getTime();
-        let me = this;
-
-        document.getElementById('map').classList.toggle("minimalistic",minimalistic); //adds the minimalistic class if loadMap=> minimalistic
-
-        this.map = L.map('map',{zoomControl: !minimalistic}).setView(origin, scale);
-       
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(this.map);
-        
-        // CUSTOM MENU
-        this.map_menu = L.control();
-        this.map_menu.onAdd = function (info) {
-            this._div = L.DomUtil.create('div', 'menu-map'); // create a div with a class "menu-map"
-            this.update();
-            return this._div;
-        };
-        // method that we will use to update the control based on feature properties passed
-        this.map_menu.update = function (props) {
-
-            if(!minimalistic){
-                var data = '<h3>tripp:<h3/><button id="minimize">exit map</button><br><button id="tripp_type_button">tripp-type:circle</button><br><button id="add_marker_button">add marker</button><br><button id="delete_marker_button">delete marker</button>'
-                this._div.innerHTML = data;
-            }
-        };
-        this.map_menu.addTo(this.map);
-
-        if (minimalistic){
-            this.map.scrollWheelZoom.disable()
-            this.map.dragging.disable()
-            this.map.touchZoom.disable()
-            this.map.doubleClickZoom.disable()
-            this.map.boxZoom.disable()
-            this.map.keyboard.disable()
-            if (this.map.tap)
-                map.tap.disable()
-
-            this.map.on('click', function(){ // create a new map that has an oposite minimalistic setting.
-                var r = new Date();
-                if(r.getTime() -StartTime >1000)
-                {
-                    
-                    let tempOrigin =me.map.getCenter();
-                    let tempScale = me.map.getZoom();
-                    me.map.remove();
-                    me.loadMap(tempOrigin,tempScale, false); 
-                }
-            });
-        }
-        else
-        {
-            this.add_marker_button= document.getElementById('add_marker_button');
-            this.delete_marker_button= document.getElementById('delete_marker_button');
-            this.tripp_type_button = document.getElementById('tripp_type_button');
-            var minimizeButton =document.getElementById('minimize');
-
-            minimizeButton.addEventListener('click',function(){
-                var r = new Date();
-                if(r.getTime() -StartTime >1000)
-                {
-                    
-                    let tempOrigin =me.map.getCenter();
-                    let tempScale = scale;
-                    if(me.boatMarker !=null)
-                        tempOrigin = me.boatMarker.getLatLng();
-                    me.map.remove();
-                    me.loadMap(tempOrigin,tempScale, true); 
-                }
-            });
-
-            this.tripp_type_button.addEventListener('click',function(){
-                me.change_tripp_type();
-            });
-            
-            this.delete_marker_button.addEventListener('click',function(){
-                if(me.selectedMarker !=null)
-                {
-                    me.deleteMarker(me.selectedMarker);
-                    me.selectedMarker=null;
-                }
-            });
-            this.add_marker_button.addEventListener('click',function(){ //somhow makes event listeners crach!!
-                me.addMarkerToMap(me.map.getCenter());
-            });
-        }
-
-        
-        if(this.marker != null && this.marker.length >0){        
-            for(var i=0; i<this.marker.length; i++){
-                this.marker[i].addTo(this.map);
-            }            
-            this.update_tripp_type();
-        }
-        if(this.boatMarker != null) 
-            this.boatMarker.addTo(this.map);
     }
 
     updateGPS(blob){
         var me = this;
-        var fileReader_long_ = new FileReader();
-        fileReader_long_.onload = function() {
+        var  blobReader = new FileReader();
+        blobReader.onload = function() {
             const data = new Float32Array(this.result);
-
-            updateBoatPositionHistory(data[0], data[1]);
-
-            if( me.boatMarker == null && data[0] !=null && data[1] !=null)
+            if(me.boatMarker == null)
             {
-                me.addMarkerToMap([data[0],data[1]],true);
-                me.map.setView([data[0],data[1]],me.scale);
-                
+                me.createBoatMarker(data[0], data[1])
+                return;
             }
-            else if(data[0] !=null && data[1] !=null)
-                me.boatMarker.setLatLng([data[0],data[1]]);
+            me.boatMarker.setLatLng([data[0],data[1]]);
         };
-        fileReader_long_.readAsArrayBuffer(blob.slice(0,8));
+        blobReader.readAsArrayBuffer(blob.slice(0,8));
     }
 
-    updateBoatPositionHistory(xPos,yPos){
-        let arrayLength = me.boatPositionHistory.length;
-        var doNotRun = arrayLength == null
-            || me.boatPositionHistory[arrayLength][0] == xPos
-            || me.boatPositionHistory[arrayLength][1] == yPos;
-        if(doNotRun )
+    createBoatMarker(lat,long){
+        this.boatMarker = L.marker([lat,long], {icon: this.boatMarkerImage});
+        this.boatMarker.addTo(this.map.leaflet_map);
+    }
+
+    update_gpsPositions(xPos,yPos){
+        let arrayLength = me.gpsPositions.length;
+        var run = (arrayLength == null
+            || me.gpsPositions[arrayLength][0] == xPos
+            || me.gpsPositions[arrayLength][1] == yPos);
+        if(run)
             return;
         
-        me.boatPositionHistory[arrayLength][0] = xPos;
-        me.boatPositionHistory[arrayLength][1] = yPos;  
+        me.gpsPositions[arrayLength][0] = xPos;
+        me.gpsPositions[arrayLength][1] = yPos;  
     }
 
-    addMarkerToMap(position, boatmarker = false){ //boatmarker = 
-        if(boatmarker){
-            this.boatMarker = L.marker(position, {icon: this.boatMarkerImage});
-            this.boatMarker.addTo(this.map);
-            return;
-        }
+}
 
+class Navigation{
+    map;
+
+    routeMarkers;
+    selectedRouteMarker; //selected marker in map;
+    routeLine;
+    tripptType; //a hole positive number
+
+    add_marker_button;
+    delete_marker_button;
+    tripp_type_button;
+
+    constructor(map){
+        this.map=map;
+        this.tripp_type=0;
+        this.routeLine = null;
+        this.routeMarkers = Array();
+    }
+
+    add_eventListeners(){
+        this.add_marker_button= document.getElementById('add_marker_button');
+        this.delete_marker_button= document.getElementById('delete_marker_button');
+        this.tripp_type_button = document.getElementById('tripp_type_button');
+
+        this.tripp_type_button.addEventListener('click',function(){
+            me.change_tripp_type();
+        });
+        this.delete_marker_button.addEventListener('click',function(){
+                me.deleteMarker(me.selectedMarker);
+                me.selectedMarker=null;
+        });
+        this.add_marker_button.addEventListener('click',function(){ //somhow makes event listeners crach!!
+            me.addMarkerToMap(me.leaflet_map.getCenter());
+        });
+    }
+
+    add_routeMarker(position){
         var me =this;
         var newMarker = L.marker(position, {draggable:'true'});
         newMarker.on('dragend', function(){
@@ -201,26 +108,22 @@ class Map{
                 this.setOpacity(0.6);
             }
         });
-        newMarker.addTo(this.map);
+        newMarker.addTo(this.leaflet_map);
         this.marker.push(newMarker);
         this.update_tripp_type();
     }
 
-    deleteMarker(index_in_marker){
-        this.map.removeLayer(this.marker[index_in_marker]);
+    delete_routeMarker(index_of_routeMarker){
+        this.leaflet_map.removeLayer(this.marker[index_of_routeMarker]);
         this.marker.splice(index_in_marker,1);//removes the selected marker from marker
         this.update_tripp_type();
     }
 
-    change_tripp_type(){
+    update_tripp_type(){
         this.tripp_type +=1
         if(this.tripp_type >2)
             this.tripp_type=0;
 
-        this.update_tripp_type();
-    }
-
-    update_tripp_type(){
         switch(this.tripp_type){
             case 0:
                 this.tripp_type_circle();
@@ -232,10 +135,9 @@ class Map{
                 this.tripp_type_fastest();
                 break;
         }
-
     }
 
-    tripp_type_circle(){
+    trippType_circle(){
         this.tripp_type_button.innerHTML = 'tripp-type: circle';
         let nodes= new Array();
         for(var i=0; i<this.marker.length;i++){
@@ -245,12 +147,12 @@ class Map{
         nodes.push(this.marker[0].getLatLng());
 
         if(this.routeLine!=null)
-            this.map.removeLayer(this.routeLine);
+            this.leaflet_map.removeLayer(this.routeLine);
 
-        this.routeLine = L.polyline(nodes, {color: 'red'}).addTo(this.map);
+        this.routeLine = L.polyline(nodes, {color: 'red'}).addTo(this.leaflet_map);
     }
 
-    tripp_type_order(){
+    trippType_order(){
         this.tripp_type_button.innerHTML = 'tripp-type: orderd';
         let nodes= new Array();
         for(var i=0; i<this.marker.length;i++){
@@ -260,14 +162,96 @@ class Map{
         if(this.routeLine!=null)
             this.map.removeLayer(this.routeLine);
 
-        this.routeLine = L.polyline(nodes, {color: 'red'}).addTo(this.map);
+        this.routeLine = L.polyline(nodes, {color: 'red'}).addTo(this.leaflet_map);
     }
 
-    tripp_type_fastest(){
+    trippType_fastest(){
         this.tripp_type_button.innerHTML = 'tripp-type: fastest';
         if(this.routeLine!=null)
-            this.map.removeLayer(this.routeLine);
+            this.leaflet_map.removeLayer(this.routeLine);
         //ship position?
+    }
+}
+
+class Map{
+    gps; //handels gps data
+    navigation;//handels navigation
+    leaflet_map;
+    leaflet_map_menu;    
+    no_fullscreen_button;
+    fullscrean;
+
+    constructor(origin, scale, fullscrean=false ,nodes=[]){
+        this.gps = new GPS(this); 
+        this.navigation= new Navigation(this);
+        this.loadMap(origin, scale, fullscrean); //creates this.leaflet_map
+    }
+
+    loadMap(origin,scale, fullscrean= false){
+        let d = new Date();
+        let startTime = d.getTime(); 
+        let time_until_userclick= 100;
+        let me = this;
+        document.getElementById('map').classList.toggle("minimalistic",!fullscrean); //adds the minimalistic class if loadMap=> minimalistic
+        this.leaflet_map = L.map('map',{zoomControl: fullscrean}).setView(origin, scale);
+        
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(this.leaflet_map);
+
+        if(fullscrean){
+            //CUSTOM MENU FOR LEAFLET MAP
+            var leaflet_map_menu = L.control();
+            leaflet_map_menu.onAdd = function (info) {
+                this._div = L.DomUtil.create('div', 'menu-map'); // create a div with a class "menu-map"
+                this.update();
+                return this._div;
+            };
+            // method that we will use to update the control based on feature properties passed
+            leaflet_map_menu.update = function (props) {
+                var data = '<h3>tripp:<h3/><button id="exit_map">exit map</button><br><button id="tripp_type_button">tripp-type:circle</button><br><button id="add_marker_button">add marker</button><br><button id="delete_marker_button">delete marker</button>'
+                this._div.innerHTML = data;
+            };
+            leaflet_map_menu.addTo(this.leaflet_map);
+
+            this.no_fullscreen_button = document.getElementById("exit_map");
+            this.no_fullscreen_button.addEventListener('click',function(){
+                d =new Date();
+                if(startTime + time_until_userclick > d.getTime())
+                    return;
+                
+
+                let tempOrigin =me.leaflet_map.getCenter();
+                let tempScale = 1
+                me.leaflet_map.remove();
+                me.loadMap(tempOrigin,tempScale, false);
+            });
+            this.navigation.add_eventListeners();
+            this.leaflet_map.removeEventListener("devicemotion");
+            return;
+        }
+
+        this.leaflet_map.scrollWheelZoom.disable()
+        this.leaflet_map.dragging.disable()
+        this.leaflet_map.touchZoom.disable()
+        this.leaflet_map.doubleClickZoom.disable()
+        this.leaflet_map.boxZoom.disable()
+        this.leaflet_map.keyboard.disable()
+        if (this.leaflet_map.tap)
+            this.leaflet_map.tap.disable()
+
+        this.leaflet_map.on('click', function(){ // create a new map that has an oposite minimalistic setting.
+            d = new Date();
+            if(startTime + time_until_userclick > d.getTime())
+                return;
+            
+            let tempOrigin = me.leaflet_map.getCenter();
+            let tempScale = me.leaflet_map.getZoom();
+            me.leaflet_map.remove();
+            me.loadMap(tempOrigin,tempScale, true); 
+        });
     }
 }
 
@@ -872,7 +856,7 @@ let temprature;
 window.addEventListener('load', function(){
     
     socket = new Sockets( new WebSocket('ws://localhost:8002'), new WebSocket('ws://localhost:8001'));
-    map = new Map([0,0],14,true);
+    map = new Map([0,0],14,false);
 
     camera = new Camera(document.getElementById("camera"));  
     slider = new SliderInput(socket,document.getElementsByClassName("slider"), document.querySelectorAll('[type="checkbox"]')[0] );
@@ -892,7 +876,7 @@ window.addEventListener('load', function(){
     
     socket.webbsocket_stream.addEventListener('message',function(e){
         camera.updateImgContent(e.data);
-        map.updateGPS(e.data);
+        map.gps.updateGPS(e.data);
         temprature.updateTemprature(e.data);
     });
 });
