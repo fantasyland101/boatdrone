@@ -24,6 +24,7 @@ class GPS{ //this instance is used by MAP
         var  blobReader = new FileReader();
         blobReader.onload = function() {
             const data = new Float32Array(this.result);
+            this.update_gpsPositions(lat,long)
             if(me.boatMarker == null)
             {
                 me.createBoatMarker(data[0], data[1])
@@ -39,16 +40,13 @@ class GPS{ //this instance is used by MAP
         this.boatMarker.addTo(this.map.leaflet_map);
     }
 
-    update_gpsPositions(xPos,yPos){
-        let arrayLength = me.gpsPositions.length;
-        var run = (arrayLength == null
-            || me.gpsPositions[arrayLength][0] == xPos
-            || me.gpsPositions[arrayLength][1] == yPos);
-        if(run)
+    update_gpsPositions(lat,long){
+        let arrayLength = this.gpsPositions.length;
+        if ( arrayLength == null || this.gpsPositions[arrayLength][0] == lat && this.gpsPositions[arrayLength][1] == long )
             return;
-        
-        me.gpsPositions[arrayLength][0] = xPos;
-        me.gpsPositions[arrayLength][1] = yPos;  
+
+        this.gpsPositions[arrayLength][0] = lat;
+        this.gpsPositions[arrayLength][1] = long;  
     }
 
 }
@@ -57,7 +55,7 @@ class Navigation{
     map;
 
     routeMarkers;
-    selectedRouteMarker; //selected marker in map;
+    selectedRouteMarker; //index of selected marker in routemarker[]
     routeLine;
     tripptType; //a hole positive number
 
@@ -66,26 +64,31 @@ class Navigation{
     tripp_type_button;
 
     constructor(map){
-        this.map=map;
-        this.tripp_type=0;
+        this.map = map;
+        this.tripp_type = 0;
         this.routeLine = null;
         this.routeMarkers = Array();
     }
 
     add_eventListeners(){
+        let me = this
         this.add_marker_button= document.getElementById('add_marker_button');
         this.delete_marker_button= document.getElementById('delete_marker_button');
         this.tripp_type_button = document.getElementById('tripp_type_button');
 
         this.tripp_type_button.addEventListener('click',function(){
-            me.change_tripp_type();
+            this.tripp_type +=1
+            if(this.tripp_type >2)
+                this.tripp_type=0;
+
+            me.update_tripp_type();
         });
         this.delete_marker_button.addEventListener('click',function(){
-                me.deleteMarker(me.selectedMarker);
-                me.selectedMarker=null;
+                me.delete_routeMarker(me.selectedRouteMarker);
+                me.selectedRouteMarker=null;
         });
         this.add_marker_button.addEventListener('click',function(){ //somhow makes event listeners crach!!
-            me.addMarkerToMap(me.leaflet_map.getCenter());
+            me.add_routeMarker(me.map.leaflet_map.getCenter());
         });
     }
 
@@ -96,79 +99,79 @@ class Navigation{
             me.update_tripp_type();
         });
         newMarker.on('click',function(){
-            if(me.selectedMarker != null){
-
-                me.marker[me.selectedMarker].setOpacity(1);
-                me.selectedMarker = null;
+            if(me.selectedRouteMarker != null){
+                me.routeMarkers[me.selectedRouteMarker].setOpacity(1);
+                me.selectedRouteMarker = null;
             }
             else{
-                for(var i =0; i<me.marker.length; i++)
-                    if(me.marker[i] === this)
-                        me.selectedMarker =i;
+                for(var i =0; i<me.routeMarkers.length; i++)
+                    if(me.routeMarkers[i] === this)
+                        me.selectedRouteMarker =i;
                 this.setOpacity(0.6);
             }
         });
-        newMarker.addTo(this.leaflet_map);
-        this.marker.push(newMarker);
+        newMarker.addTo(this.map.leaflet_map);
+        this.routeMarkers.push(newMarker);
         this.update_tripp_type();
     }
 
     delete_routeMarker(index_of_routeMarker){
-        this.leaflet_map.removeLayer(this.marker[index_of_routeMarker]);
-        this.marker.splice(index_in_marker,1);//removes the selected marker from marker
+        if(index_of_routeMarker == null)
+            return;
+        this.map.leaflet_map.removeLayer(this.routeMarkers[index_of_routeMarker]);
+        this.routeMarkers.splice(index_of_routeMarker,1);//removes the selected marker from marker
         this.update_tripp_type();
     }
 
     update_tripp_type(){
-        this.tripp_type +=1
-        if(this.tripp_type >2)
-            this.tripp_type=0;
-
         switch(this.tripp_type){
             case 0:
-                this.tripp_type_circle();
+                this.trippType_circle();
                 break;
             case 1: 
-                this.tripp_type_order();
+                this.trippType_order();
                 break;
             case 2: 
-                this.tripp_type_fastest();
+                this.trippType_fastest();
                 break;
         }
     }
 
     trippType_circle(){
         this.tripp_type_button.innerHTML = 'tripp-type: circle';
-        let nodes= new Array();
-        for(var i=0; i<this.marker.length;i++){
-            nodes.push(this.marker[i].getLatLng());
+        if(this.routeLine != null)
+            this.map.leaflet_map.removeLayer(this.routeLine);
 
+        let nodes = [];
+        for(var i=0; i<this.routeMarkers.length;i++){
+            nodes.push( this.routeMarkers[i].getLatLng());
+            
         }
-        nodes.push(this.marker[0].getLatLng());
+        if(nodes.length == 0)
+            return;
 
-        if(this.routeLine!=null)
-            this.leaflet_map.removeLayer(this.routeLine);
-
-        this.routeLine = L.polyline(nodes, {color: 'red'}).addTo(this.leaflet_map);
+        nodes.push(this.routeMarkers[0].getLatLng());
+        this.routeLine = L.polyline(nodes, {color: 'red'}).addTo(this.map.leaflet_map);
     }
 
     trippType_order(){
         this.tripp_type_button.innerHTML = 'tripp-type: orderd';
         let nodes= new Array();
-        for(var i=0; i<this.marker.length;i++){
-            nodes.push(this.marker[i].getLatLng());
+        for(var i=0; i<this.routeMarkers.length;i++){
+            nodes.push(this.routeMarkers[i].getLatLng());
 
         }
         if(this.routeLine!=null)
-            this.map.removeLayer(this.routeLine);
+            this.map.leaflet_map.removeLayer(this.routeLine);
 
-        this.routeLine = L.polyline(nodes, {color: 'red'}).addTo(this.leaflet_map);
+        this.routeLine = L.polyline(nodes, {color: 'red'}).addTo(this.map.leaflet_map);
     }
 
     trippType_fastest(){
         this.tripp_type_button.innerHTML = 'tripp-type: fastest';
+
         if(this.routeLine!=null)
-            this.leaflet_map.removeLayer(this.routeLine);
+            this.map.leaflet_map.removeLayer(this.routeLine);
         //ship position?
     }
 }
