@@ -60,6 +60,7 @@ class GPS{ //this instance is used by MAP
             let time_differnace_inSeconds = (new_time - this.gpsPositon_lastUpdate)/second;
             this.boatVelocity_lat = (lat -  this.gpsPositions[arrayLength-1][0])*degree_in_Meter/time_differnace_inSeconds;
             this.boatVelocity_long = (long - this.gpsPositions[arrayLength -1][1])*degree_in_Meter/time_differnace_inSeconds;
+            console.log(this.boatVelocity_lat +"   "+this.boatVelocity_long);
         }
         this.gpsPositon_lastUpdate = new_time;
     }
@@ -90,11 +91,10 @@ class Navigation{
         this.delete_marker_button= document.getElementById('delete_marker_button');
         this.tripp_type_button = document.getElementById('tripp_type_button');
 
-        this.tripp_type_button.addEventListener('click',function(){
-            this.tripp_type +=1
-            if(this.tripp_type >2)
-                this.tripp_type=0;
-
+        this.tripp_type_button.addEventListener('click',function(){ 
+            me.tripp_type +=1;
+            if(me.tripp_type > 2 )
+                me.tripp_type=0;
             me.update_tripp_type();
         });
         this.delete_marker_button.addEventListener('click',function(){
