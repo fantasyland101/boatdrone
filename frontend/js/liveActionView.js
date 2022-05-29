@@ -56,9 +56,10 @@ class GPS{ //this instance is used by MAP
         if(arrayLength >0) //there exist 2 elements or more in the array
         {
             const second =1000;
+            const degree_in_Meter = 111000;
             let time_differnace_inSeconds = (new_time - this.gpsPositon_lastUpdate)/second;
-            this.boatVelocity_lat = (lat -  this.gpsPositions[arrayLength-1][0])/time_differnace_inSeconds;
-            this.boatVelocity_long = (long - this.gpsPositions[arrayLength -1][1])/time_differnace_inSeconds;
+            this.boatVelocity_lat = (lat -  this.gpsPositions[arrayLength-1][0])*degree_in_Meter/time_differnace_inSeconds;
+            this.boatVelocity_long = (long - this.gpsPositions[arrayLength -1][1])*degree_in_Meter/time_differnace_inSeconds;
         }
         this.gpsPositon_lastUpdate = new_time;
     }
@@ -882,7 +883,6 @@ window.addEventListener('load', function(){
         bindedKeys[1]= "KeyS"
         bindedKeys[2]= "KeyA"
         bindedKeys[3]= "KeyD"
-
 
     keyboard = new KeyboardInput(socket,bindedKeys);
 
