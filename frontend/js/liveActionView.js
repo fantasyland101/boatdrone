@@ -3,7 +3,10 @@ const checkInputSpeed=10;
 class GPS{ //this instance is used by MAP
     boatMarker;
     boatMarkerImage; //custom image
+    boatVelocity_lat;
+    boatVelocity_long;
     gpsPositions; //gps history, orderd. 
+    gpsPositon_lastUpdate; //time when the gpsPosition was last updated
     map; //instance of class map controller. 
 
     constructor(map){
@@ -41,14 +44,24 @@ class GPS{ //this instance is used by MAP
     }
 
     update_gpsPositions(lat,long){
+
         let arrayLength = this.gpsPositions.length;
         if ( arrayLength == null || this.gpsPositions[arrayLength][0] == lat && this.gpsPositions[arrayLength][1] == long )
             return;
-
+        
+        const d = new Date();
+        let new_time = d.getTime;         
         this.gpsPositions[arrayLength][0] = lat;
         this.gpsPositions[arrayLength][1] = long;  
+        if(arrayLength >0) //there exist 2 elements or more in the array
+        {
+            const second =1000;
+            let time_differnace_inSeconds = (new_time - this.gpsPositon_lastUpdate)/second;
+            this.boatVelocity_lat = (lat -  this.gpsPositions[arrayLength-1][0])/time_differnace_inSeconds;
+            this.boatVelocity_long = (long - this.gpsPositions[arrayLength -1][1])/time_differnace_inSeconds;
+        }
+        this.gpsPositon_lastUpdate = new_time;
     }
-
 }
 
 class Navigation{
@@ -444,8 +457,6 @@ class Settings{
         this.keyboard.disable();
         this.slider.disable();
     }
-
-
 }
 
 
@@ -827,16 +838,16 @@ class KeyboardInput{
             this.lastPushedKey =null;       
         switch(e.code){
             case this.bindedKeys[this.throttle_up_key_index]://throttle up
-                this.bindedKeysIsPushed[this.throttle_up_key_index]=false;
+                this.bindedKeysIsPushed[this.throttle_up_key_index] = false;
                 break;
             case this.bindedKeys[this.throttle_down_key_index]://throttle down
-                this.bindedKeysIsPushed[this.throttle_down_key_index]=false;
+                this.bindedKeysIsPushed[this.throttle_down_key_index] = false;
                 break;
             case this.bindedKeys[this.gimble_left_key_index]://gimble left
-                this.bindedKeysIsPushed[this.gimble_left_key_index]=false;
+                this.bindedKeysIsPushed[this.gimble_left_key_index] = false;
                 break;
             case this.bindedKeys[this.gimble_right_key_index]://gimble right
-                this.bindedKeysIsPushed[this.gimble_right_key_index]=false;
+                this.bindedKeysIsPushed[this.gimble_right_key_index] = false;
                 break;
         }
     }
